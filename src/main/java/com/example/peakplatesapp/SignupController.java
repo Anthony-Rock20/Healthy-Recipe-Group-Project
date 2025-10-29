@@ -34,7 +34,7 @@ public class SignupController {
 
     public void goBack(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/login.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Login.fxml"));
             Scene scene = new Scene(loader.load());
             Stage stage = (Stage) emailField.getScene().getWindow();
             stage.setScene(scene);
