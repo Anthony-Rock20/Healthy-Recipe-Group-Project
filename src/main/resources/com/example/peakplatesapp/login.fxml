@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.peakplatesapp.LoginController"
+            prefWidth="400" prefHeight="500">
+    <VBox alignment="CENTER" spacing="20" layoutX="50" layoutY="60" prefWidth="300">
+        <Label text="🏔 Peak Plates" style="-fx-font-size: 24px; -fx-font-style: italic;" />
+        <Label text="Log In" style="-fx-font-weight: bold; -fx-font-size: 18px;" />
+
+        <TextField fx:id="emailField" promptText="email@domain.com" prefWidth="250"/>
+        <PasswordField fx:id="passwordField" promptText="password" prefWidth="250"/>
+        <Button text="Sign in" fx:id="loginButton" prefWidth="250" onAction="#handleLogin"/>
+
+        <Label text="No account?">
+            <graphic>
+                <Hyperlink text="Sign up" onAction="#openSignup"/>
+            </graphic>
+        </Label>
+    </VBox>
+</AnchorPane>
+
