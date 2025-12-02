@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox alignment="CENTER" spacing="20.0" styleClass="root" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.peakplatesapp.AccessDataController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+    </padding>
+
+    <Label text="User Settings" styleClass="title-label"/>
+
+    <GridPane styleClass="data-grid" hgap="10" vgap="10" alignment="CENTER">
+        <Label text="Name:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="nameField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+        <Label text="Age:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <TextField fx:id="ageField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+        <Label text="Gender:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <TextField fx:id="genderField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+        <Label text="Height:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+        <TextField fx:id="heightField" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+        <Label text="Weight:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+        <TextField fx:id="weightField" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+
+    </GridPane>
+
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Save Changes" onAction="#handleWrite" styleClass="action-button"/>
+    </HBox>
+
+
+</VBox>

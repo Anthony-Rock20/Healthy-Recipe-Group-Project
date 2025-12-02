@@ -36,3 +36,6 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+### Firebase Service Account Key ###
+src/main/resources/com/example/peaksplatesapp/key.json
