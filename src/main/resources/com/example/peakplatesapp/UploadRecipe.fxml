@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.ImageView?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.peakplatesapp.RecipeUploadController"
+            prefHeight="700.0" prefWidth="800.0">
+
+    <!-- Top Section with Title -->
+    <top>
+        <VBox spacing="10" style="-fx-background-color: #4CAF50;">
+            <padding>
+                <Insets top="20" bottom="20" left="20" right="20"/>
+            </padding>
+            <Label text="Upload Recipe" style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: white;"/>
+            <Label text="Share your delicious recipes with the Peak Plates community!" style="-fx-font-size: 14; -fx-text-fill: #f0f0f0;"/>
+        </VBox>
+    </top>
+
+    <!-- Center Section with Form -->
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-background-color: white;">
+            <VBox spacing="20" style="-fx-background-color: white;">
+                <padding>
+                    <Insets top="20" bottom="20" left="40" right="40"/>
+                </padding>
+
+                <!-- Image Selection Section -->
+                <VBox spacing="10" style="-fx-border-color: #ddd; -fx-border-width: 2; -fx-border-radius: 5;">
+                    <padding>
+                        <Insets top="20" bottom="20" left="20" right="20"/>
+                    </padding>
+                    
+                    <Label text="📸 Select Recipe Image" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+                    
+                    <StackPane fx:id="imagePreviewPane" prefHeight="300" style="-fx-background-color: #f9f9f9; -fx-border-color: #ddd; -fx-border-width: 1; -fx-border-radius: 3;">
+                        <ImageView fx:id="imagePreview" fitHeight="280" fitWidth="280" preserveRatio="true"/>
+                        <Label fx:id="imageLabel" text="Click button below to select an image" style="-fx-font-size: 14; -fx-text-fill: #999;"/>
+                    </StackPane>
+                    
+                    <Button text="🖼️ Choose Image" onAction="#handleSelectImage" 
+                            style="-fx-font-size: 12; -fx-padding: 8 15; -fx-background-color: #2196F3; -fx-text-fill: white;"/>
+                    <Label fx:id="selectedImageLabel" text="No image selected" style="-fx-font-size: 12; -fx-text-fill: #666;"/>
+                </VBox>
+
+                <!-- Description Section -->
+                <VBox spacing="10">
+                    <Label text="📝 Recipe Description" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+                    <Label text="Ingredients, instructions, cooking tips, etc." style="-fx-font-size: 12; -fx-text-fill: #999;"/>
+                    <TextArea fx:id="descriptionArea" wrapText="true" prefRowCount="8" 
+                              style="-fx-font-size: 12; -fx-padding: 10; -fx-border-color: #ddd; -fx-border-width: 1;"/>
+                    <Label fx:id="charCountLabel" text="0 / 2000 characters" style="-fx-font-size: 11; -fx-text-fill: #999;"/>
+                </VBox>
+
+                <!-- Action Buttons -->
+                <HBox spacing="15" alignment="CENTER">
+                    <Button text="📤 Upload Recipe" onAction="#handleUpload" 
+                            style="-fx-font-size: 14; -fx-padding: 12 30; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-cursor: hand;">
+                        <HBox.hgrow>ALWAYS</HBox.hgrow>
+                    </Button>
+                    <Button text="❌ Cancel" onAction="#handleCancel" 
+                            style="-fx-font-size: 14; -fx-padding: 12 30; -fx-background-color: #f44336; -fx-text-fill: white; -fx-cursor: hand;">
+                        <HBox.hgrow>ALWAYS</HBox.hgrow>
+                    </Button>
+                </HBox>
+            </VBox>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

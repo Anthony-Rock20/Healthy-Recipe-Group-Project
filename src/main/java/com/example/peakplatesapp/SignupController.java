@@ -44,7 +44,7 @@ public class SignupController {
         }
 
 
-        String email = username + "@example.com";
+        String email = username.contains("@") ? username : username + "@example.com";
 
         try {
             System.out.println("Attempting to register user: " + email);

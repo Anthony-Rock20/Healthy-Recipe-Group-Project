@@ -124,6 +124,23 @@ public class MainApp extends Application {
         scene.setRoot(root);
     }
 
+    public void switchToUploadRecipe(String userId, String username) throws IOException {
+        System.out.println("Switching to upload recipe for user: " + userId);
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("UploadRecipe.fxml"));
+        Parent root = loader.load();
+
+        RecipeUploadController uploadController = loader.getController();
+        if (uploadController != null) {
+            uploadController.setMainApp(this);
+            uploadController.setUserId(userId);
+            uploadController.setUsername(username);
+        }
+
+        scene.setRoot(root);
+        stage.setTitle("Peak Plates - Upload Recipe");
+    }
+
 
     public static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
