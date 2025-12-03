@@ -3,8 +3,10 @@ package com.example.peakplatesapp;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.geometry.Insets;
@@ -96,11 +98,30 @@ public class DashboardController {
         card.setStyle("-fx-border-color: #ddd; -fx-border-width: 1; -fx-border-radius: 5; -fx-background-color: #fff;");
         card.setPadding(new Insets(15));
 
-        // Header with username and timestamp
+        // Header with username, timestamp, and edit/delete buttons
         HBox header = new HBox(10);
         Label userLabel = new Label("👤 " + recipe.getUsername());
         userLabel.setStyle("-fx-font-size: 14; -fx-font-weight: bold;");
         header.getChildren().add(userLabel);
+        
+        // Add spacer
+        javafx.scene.layout.Region spacer = new javafx.scene.layout.Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        header.getChildren().add(spacer);
+        
+        // Add edit/delete buttons only if current user is the recipe creator
+        if (userId != null && userId.equals(recipe.getUserId())) {
+            Button editButton = new Button("✏️ Edit");
+            editButton.setStyle("-fx-font-size: 10; -fx-padding: 5 10;");
+            editButton.setOnAction(e -> handleEditRecipe(recipe));
+            
+            Button deleteButton = new Button("🗑️ Delete");
+            deleteButton.setStyle("-fx-font-size: 10; -fx-padding: 5 10; -fx-background-color: #f44336; -fx-text-fill: white;");
+            deleteButton.setOnAction(e -> handleDeleteRecipe(recipe));
+            
+            header.getChildren().addAll(editButton, deleteButton);
+        }
+        
         card.getChildren().add(header);
 
         // Image
@@ -245,6 +266,35 @@ public class DashboardController {
             }
         } catch (IOException e) {
             System.err.println("Error logging out: " + e.getMessage());
+        }
+    }
+
+    private void handleEditRecipe(Recipe recipe) {
+        // For now, show a message. Full edit functionality can be added later
+        showAlert("Edit Recipe", "Edit functionality coming soon!\nRecipe ID: " + recipe.getId());
+    }
+
+    private void handleDeleteRecipe(Recipe recipe) {
+        Alert confirmDialog = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmDialog.setTitle("Delete Recipe");
+        confirmDialog.setHeaderText("Are you sure?");
+        confirmDialog.setContentText("This action cannot be undone.");
+        
+        java.util.Optional<javafx.scene.control.ButtonType> result = confirmDialog.showAndWait();
+        if (result.isPresent() && result.get() == javafx.scene.control.ButtonType.OK) {
+            try {
+                FirestoreContext.getFirestore()
+                        .collection("recipes")
+                        .document(recipe.getId())
+                        .delete()
+                        .get();
+                
+                showAlert("Success", "Recipe deleted successfully!");
+                loadRecipes(); // Refresh recipes
+            } catch (Exception e) {
+                System.err.println("Error deleting recipe: " + e.getMessage());
+                showAlert("Error", "Failed to delete recipe: " + e.getMessage());
+            }
         }
     }
 

@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+import javafx.application.Platform;
 
 public class RecipeUploadController {
     @FXML
@@ -52,51 +53,66 @@ public class RecipeUploadController {
 
     @FXML
     public void initialize() {
-        // Add character count listener
-        descriptionArea.textProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal.length() > MAX_DESCRIPTION_LENGTH) {
-                descriptionArea.setText(oldVal);
-            } else {
-                charCountLabel.setText(newVal.length() + " / " + MAX_DESCRIPTION_LENGTH + " characters");
+        try {
+            // Add character count listener
+            if (descriptionArea != null) {
+                descriptionArea.textProperty().addListener((obs, oldVal, newVal) -> {
+                    if (newVal != null) {
+                        if (newVal.length() > MAX_DESCRIPTION_LENGTH) {
+                            descriptionArea.setText(oldVal);
+                        } else {
+                            charCountLabel.setText(newVal.length() + " / " + MAX_DESCRIPTION_LENGTH + " characters");
+                        }
+                    }
+                });
             }
-        });
+        } catch (Exception e) {
+            System.err.println("Error initializing RecipeUploadController: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @FXML
     public void handleSelectImage() {
-        try {
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Select Recipe Image");
-            fileChooser.getExtensionFilters().addAll(
-                    new FileChooser.ExtensionFilter("Image Files", "*.jpg", "*.jpeg", "*.png", "*.gif"),
-                    new FileChooser.ExtensionFilter("All Files", "*.*")
-            );
-
-            // Get the current stage from the button or any node in the scene
-            Stage stage = null;
-            if (imagePreviewPane != null && imagePreviewPane.getScene() != null) {
-                Window window = imagePreviewPane.getScene().getWindow();
-                if (window instanceof Stage) {
-                    stage = (Stage) window;
+        new Thread(() -> {
+            try {
+                if (imagePreviewPane == null || imagePreviewPane.getScene() == null) {
+                    System.err.println("Scene not initialized yet");
+                    return;
                 }
-            }
 
-            if (stage != null) {
+                Window window = imagePreviewPane.getScene().getWindow();
+                if (!(window instanceof Stage)) {
+                    System.err.println("Window is not a Stage");
+                    return;
+                }
+
+                Stage stage = (Stage) window;
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.setTitle("Select Recipe Image");
+                fileChooser.getExtensionFilters().addAll(
+                        new FileChooser.ExtensionFilter("Image Files", "*.jpg", "*.jpeg", "*.png", "*.gif"),
+                        new FileChooser.ExtensionFilter("All Files", "*.*")
+                );
+
                 File selectedFile = fileChooser.showOpenDialog(stage);
                 if (selectedFile != null) {
                     selectedImageFile = selectedFile;
                     displayImage(selectedFile);
-                    selectedImageLabel.setText("Selected: " + selectedFile.getName());
+                    javafx.application.Platform.runLater(() -> {
+                        if (selectedImageLabel != null) {
+                            selectedImageLabel.setText("Selected: " + selectedFile.getName());
+                        }
+                    });
                 }
-            } else {
-                System.err.println("Stage not found");
-                showAlert(Alert.AlertType.ERROR, "Error", "Could not open file dialog");
+            } catch (Exception e) {
+                System.err.println("Error selecting image: " + e.getMessage());
+                e.printStackTrace();
+                javafx.application.Platform.runLater(() -> {
+                    showAlert(Alert.AlertType.ERROR, "Error", "Failed to select image: " + e.getMessage());
+                });
             }
-        } catch (Exception e) {
-            System.err.println("Error selecting image: " + e.getMessage());
-            e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Error", "Failed to select image: " + e.getMessage());
-        }
+        }).start();
     }
 
     private void displayImage(File imageFile) {
