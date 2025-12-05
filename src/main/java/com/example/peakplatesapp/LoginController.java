@@ -6,29 +6,17 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import javafx.scene.control.Alert;
+
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
-import com.google.cloud.firestore.WriteResult;
 import com.google.cloud.firestore.Firestore;
+
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
+
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ExecutionException;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.DocumentSnapshot;
-import com.google.api.core.ApiFuture; // For async operations
-import com.google.firebase.auth.*;
-import javafx.application.Platform; // Import for Platform.runLater()
-
-
 
 public class LoginController {
 
@@ -51,7 +39,7 @@ public class LoginController {
             return;
         }
 
-
+        // SAME AS YOURS — do not change this
         String loginEmail = username.contains("@") ? username : username + "@example.com";
 
         System.out.println("Attempting login with email: " + loginEmail);
@@ -59,15 +47,14 @@ public class LoginController {
         tryFirestoreLogin(loginEmail, password);
     }
 
-
     private void tryFirestoreLogin(String email, String password) {
         try {
             System.out.println("=== DEBUG START ===");
             System.out.println("Looking for email: " + email);
 
-            Firestore db = FirestoreContext.getFirestore();
+            Firestore db = FirestoreContext.getFirestore(); // SAME
 
-
+            // SAME FIRESTORE DEBUG INFO
             System.out.println("Querying ALL users to see what's in database...");
             QuerySnapshot allUsers = db.collection("users").get().get();
             System.out.println("Total users in database: " + allUsers.size());
@@ -87,7 +74,7 @@ public class LoginController {
                 }
             }
 
-
+            // SAME QUERY
             System.out.println("\nNow querying for email: " + email);
             QuerySnapshot snap = db.collection("users")
                     .whereEqualTo("email", email)
@@ -99,6 +86,7 @@ public class LoginController {
             boolean authenticated = false;
             String uid = null;
 
+            // SAME PASSWORD CHECKING
             for (QueryDocumentSnapshot doc : snap.getDocuments()) {
                 System.out.println("Checking document: " + doc.getId());
                 String storedPassword = doc.getString("password");
@@ -117,9 +105,9 @@ public class LoginController {
                 }
             }
 
+            // SAME AUTH LOGIC
             if (authenticated && uid != null) {
                 System.out.println("Authentication successful! Navigating...");
-
 
                 try {
                     FirebaseAuth auth = FirestoreContext.getAuth();
@@ -127,7 +115,6 @@ public class LoginController {
                     System.out.println("✅ Firebase Auth verification: " + userRecord.getEmail());
 
                     showAlert("Login successful!");
-
 
                     if (mainApp != null) {
                         mainApp.switchToDashboard(uid);
@@ -140,12 +127,11 @@ public class LoginController {
                     System.err.println("❌ Firebase Auth verification failed: " + e.getMessage());
                     showAlert("Login error: User not found in authentication system.");
                 }
+
             } else {
                 System.out.println("❌ Authentication failed");
                 showAlert("Invalid username or password.");
             }
-
-
 
         } catch (Exception e) {
             System.err.println("❌ Firestore login error: " + e.getMessage());
@@ -159,13 +145,15 @@ public class LoginController {
         try {
             if (mainApp != null) {
                 mainApp.switchToView("signup.fxml");
-            } else {
-                // Fallback if mainApp not set
-                Stage stage = (Stage) emailField.getScene().getWindow();
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("signup.fxml"));
-                Scene scene = new Scene(loader.load());
-                stage.setScene(scene);
+                return;
             }
+
+            // Fallback navigation
+            Stage stage = (Stage) emailField.getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("signup.fxml"));
+            Scene scene = new Scene(loader.load());
+            stage.setScene(scene);
+
         } catch (IOException e) {
             showAlert("Error opening signup page: " + e.getMessage());
             e.printStackTrace();
@@ -176,14 +164,6 @@ public class LoginController {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText(null);
         alert.setContentText(message);
-        alert.showAndWait();
-    }
-
-    private void showAlert(Alert.AlertType type, String title, String content) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
         alert.showAndWait();
     }
 }

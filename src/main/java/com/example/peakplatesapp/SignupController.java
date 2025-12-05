@@ -8,9 +8,7 @@ import javafx.scene.*;
 import javafx.application.Platform;
 import java.io.IOException;
 
-// Firebase imports
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
 import com.google.firebase.auth.UserRecord.CreateRequest;
 import com.google.cloud.firestore.Firestore;
@@ -26,8 +24,9 @@ public class SignupController {
 
     @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
+    @FXML private PasswordField confirmPasswordField;
 
-    private MainApp mainApp; // Add reference to MainApp
+    private MainApp mainApp;
 
     public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
@@ -37,31 +36,28 @@ public class SignupController {
     public void handleSignup(ActionEvent event) {
         String username = usernameField.getText().trim();
         String password = passwordField.getText();
+        String confirm = confirmPasswordField.getText();
 
-        if (username.isEmpty() || password.isEmpty()) {
-            showAlert("Please enter both username and password.");
+        if (username.isEmpty() || password.isEmpty() || confirm.isEmpty()) {
+            showAlert("Please fill in all fields.");
             return;
         }
 
+        if (!password.equals(confirm)) {
+            showAlert("Passwords do not match.");
+            return;
+        }
 
         String email = username.contains("@") ? username : username + "@example.com";
 
         try {
-            System.out.println("Attempting to register user: " + email);
-
-
             FirebaseAuth auth = FirestoreContext.getAuth();
-            if (auth == null) {
-                throw new RuntimeException("FirebaseAuth initialization failed");
-            }
-
             Firestore db = FirestoreContext.getFirestore();
-            if (db == null) {
-                throw new RuntimeException("Firestore initialization failed");
+
+            if (auth == null || db == null) {
+                throw new RuntimeException("Firebase initialization failed");
             }
 
-
-            System.out.println("Creating user in Firebase Auth...");
             CreateRequest request = new CreateRequest()
                     .setEmail(email)
                     .setEmailVerified(false)
@@ -70,50 +66,38 @@ public class SignupController {
 
             ApiFuture<UserRecord> userRecordFuture = auth.createUserAsync(request);
 
-
             userRecordFuture.addListener(() -> {
                 Platform.runLater(() -> {
                     try {
                         UserRecord userRecord = userRecordFuture.get();
-                        System.out.println("User created in Firebase Auth with ID: " + userRecord.getUid());
 
-
-                        System.out.println("Storing user data in Firestore...");
                         Map<String, Object> data = new HashMap<>();
                         data.put("username", username);
                         data.put("email", email);
-                        data.put("password",password);
+                        data.put("password", password);
                         data.put("displayName", username);
                         data.put("uid", userRecord.getUid());
                         data.put("createdAt", com.google.cloud.Timestamp.now());
 
-
-                        DocumentReference docRef = db.collection("users").document(userRecord.getUid());
+                        DocumentReference docRef =
+                                db.collection("users").document(userRecord.getUid());
                         docRef.set(data);
-                        System.out.println("User data stored in Firestore successfully");
 
-                        showAlert("Registration Successful!\nUser ID: " + userRecord.getUid() +
-                                "\nYou can now login with your credentials.");
+                        showAlert("Registration Successful!\nYou can now login.");
 
-                        // Clear fields
                         usernameField.clear();
                         passwordField.clear();
-
-
+                        confirmPasswordField.clear();
 
                     } catch (InterruptedException | ExecutionException e) {
-                        System.err.println("Error in user creation: " + e.getMessage());
-                        showAlert("Registration Error: " + e.getCause().getMessage());
+                        showAlert("Registration Error: " + e.getMessage());
                     } catch (Exception e) {
-                        System.err.println("Unexpected error: " + e.getMessage());
                         showAlert("Registration Error: " + e.getMessage());
                     }
                 });
             }, Runnable::run);
 
         } catch (Exception e) {
-            System.err.println("Registration error: " + e.getMessage());
-            e.printStackTrace();
             showAlert("Registration Error: " + e.getMessage());
         }
     }
@@ -123,31 +107,21 @@ public class SignupController {
         try {
             if (mainApp != null) {
                 mainApp.switchToView("Login.fxml");
-            } else {
-
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("Login.fxml"));
-                Scene scene = new Scene(loader.load());
-                Stage stage = (Stage) usernameField.getScene().getWindow();
-                stage.setScene(scene);
+                return;
             }
+
+            Stage stage = (Stage) usernameField.getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("Login.fxml"));
+            Scene scene = new Scene(loader.load());
+            stage.setScene(scene);
+
         } catch (IOException e) {
-            System.err.println("Error navigating back: " + e.getMessage());
-            showAlert("Error: Cannot navigate to login page.");
+            showAlert("Error: Cannot return to login page.");
         }
     }
 
-
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setContentText(message);
-        alert.setHeaderText(null);
-        alert.showAndWait();
-    }
-
-
-    private void showAlert(Alert.AlertType type, String title, String message) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
