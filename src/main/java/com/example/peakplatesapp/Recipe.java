@@ -3,20 +3,23 @@ package com.example.peakplatesapp;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import com.google.cloud.firestore.Blob;
 
 public class Recipe implements Serializable {
     private String id;
     private String userId;
     private String username;
     private String description;
+    private String title;
     private String imagePath;
-    private byte[] imageData;
+    private Blob imageData;
     private long timestamp;
     private int likes;
     private int favorites;
     private int shares;
     private List<String> likedByUsers;
     private List<String> favoriteByUsers;
+    private List<String> sharedWith;
 
     public Recipe() {
         this.likes = 0;
@@ -24,6 +27,7 @@ public class Recipe implements Serializable {
         this.shares = 0;
         this.likedByUsers = new ArrayList<>();
         this.favoriteByUsers = new ArrayList<>();
+        this.sharedWith = new ArrayList<>();
         this.timestamp = System.currentTimeMillis();
     }
 
@@ -33,6 +37,11 @@ public class Recipe implements Serializable {
         this.username = username;
         this.description = description;
         this.imagePath = imagePath;
+    }
+
+    public Recipe(String userId, String username, String title, String description, String imagePath) {
+        this(userId, username, description, imagePath);
+        this.title = title;
     }
 
     // Getters and Setters
@@ -76,11 +85,11 @@ public class Recipe implements Serializable {
         this.imagePath = imagePath;
     }
 
-    public byte[] getImageData() {
+    public Blob getImageData() {
         return imageData;
     }
 
-    public void setImageData(byte[] imageData) {
+    public void setImageData(Blob imageData) {
         this.imageData = imageData;
     }
 
@@ -130,5 +139,24 @@ public class Recipe implements Serializable {
 
     public void setFavoriteByUsers(List<String> favoriteByUsers) {
         this.favoriteByUsers = favoriteByUsers;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public List<String> getSharedWith() {
+        if (sharedWith == null) {
+            sharedWith = new ArrayList<>();
+        }
+        return sharedWith;
+    }
+
+    public void setSharedWith(List<String> sharedWith) {
+        this.sharedWith = sharedWith;
     }
 }

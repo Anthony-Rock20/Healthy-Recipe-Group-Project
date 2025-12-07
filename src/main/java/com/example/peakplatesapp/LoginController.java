@@ -62,6 +62,13 @@ public class LoginController {
 
     private void tryFirestoreLogin(String email, String password) {
         try {
+            // Quick credentials health check to provide clearer error messages
+            String credsCheck = FirestoreContext.credentialsHealthCheck();
+            if (credsCheck != null) {
+                System.err.println("Firestore credentials problem: " + credsCheck);
+                showAlert(Alert.AlertType.ERROR, "Firebase Credentials", credsCheck + "\nSee project README for setup instructions.");
+                return;
+            }
             System.out.println("=== DEBUG START ===");
             System.out.println("Looking for email: " + email);
 
@@ -158,11 +165,11 @@ public class LoginController {
     public void openSignup(ActionEvent event) {
         try {
             if (mainApp != null) {
-                mainApp.switchToView("signup.fxml");
+                mainApp.switchToView("Signup");
             } else {
                 // Fallback if mainApp not set
                 Stage stage = (Stage) emailField.getScene().getWindow();
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("signup.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/peakplatesapp/Signup.fxml"));
                 Scene scene = new Scene(loader.load());
                 stage.setScene(scene);
             }

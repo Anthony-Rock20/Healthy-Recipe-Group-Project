@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.peakplatesapp.FavoritesController"
+            prefHeight="800.0" prefWidth="1000.0">
+
+    <!-- Top Section with Title and Back Button -->
+    <top>
+        <VBox spacing="15" style="-fx-background-color: #f5f5f5; -fx-border-color: #ddd; -fx-border-width: 0 0 2 0;">
+            <padding>
+                <Insets top="20" bottom="20" left="20" right="20"/>
+            </padding>
+            
+            <HBox spacing="20" alignment="CENTER_LEFT">
+                <Button text="⬅️ Back to Dashboard" onAction="#handleBackToDashboard" 
+                        style="-fx-font-size: 12; -fx-padding: 8 15; -fx-background-color: #2196F3; -fx-text-fill: white;"/>
+                <Label text="My Favorite Recipes" style="-fx-font-size: 24; -fx-font-weight: bold;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="favoriteCountLabel" text="0 favorites" style="-fx-font-size: 14; -fx-text-fill: #666;"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- Center Section for Favorite Recipes -->
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-background-color: white;">
+            <VBox fx:id="favoritesContainer" spacing="20" style="-fx-background-color: white;">
+                <padding>
+                    <Insets top="20" bottom="20" left="20" right="20"/>
+                </padding>
+                <Label text="You haven't favorited any recipes yet!" style="-fx-font-size: 16; -fx-text-fill: #999;"/>
+            </VBox>
+        </ScrollPane>
+    </center>
+
+    <!-- Bottom Navigation -->
+    <bottom>
+        <HBox spacing="10" alignment="CENTER" style="-fx-background-color: #f5f5f5;">
+            <padding>
+                <Insets top="10" bottom="10" left="20" right="20"/>
+            </padding>
+
+            <Button text="📤 Upload Recipe" style="-fx-font-size: 12; -fx-padding: 8 15;" onAction="#handleUploadRecipe"/>
+            <Button text="📨 Shared with Me" style="-fx-font-size: 12; -fx-padding: 8 15;" onAction="#handleViewSharedWithMe"/>
+            <Button text="🚪 Logout" onAction="#handleLogout"
+                    style="-fx-font-size: 12; -fx-padding: 8 15; -fx-background-color: #f44336; -fx-text-fill: white;"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

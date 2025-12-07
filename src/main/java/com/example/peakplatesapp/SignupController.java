@@ -92,18 +92,24 @@ public class SignupController {
                         docRef.set(data);
                         System.out.println("User data stored in Firestore successfully");
 
-                        showAlert("Registration Successful!\nUser ID: " + userRecord.getUid() +
-                                "\nYou can now login with your credentials.");
+                        showAlert("Registration Successful!", "Account created", "You can now login with your credentials.");
 
                         // Clear fields
                         usernameField.clear();
                         passwordField.clear();
 
-
+                        // Navigate back to login
+                        try {
+                            if (mainApp != null) {
+                                mainApp.switchToView("Login");
+                            }
+                        } catch (Exception ex) {
+                            System.err.println("Error navigating to login: " + ex.getMessage());
+                        }
 
                     } catch (InterruptedException | ExecutionException e) {
                         System.err.println("Error in user creation: " + e.getMessage());
-                        showAlert("Registration Error: " + e.getCause().getMessage());
+                        showAlert("Registration Error", "Signup Failed", e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
                     } catch (Exception e) {
                         System.err.println("Unexpected error: " + e.getMessage());
                         showAlert("Registration Error: " + e.getMessage());
@@ -122,7 +128,7 @@ public class SignupController {
     public void goBack(ActionEvent event) {
         try {
             if (mainApp != null) {
-                mainApp.switchToView("Login.fxml");
+                mainApp.switchToView("Login");
             } else {
 
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("Login.fxml"));
@@ -138,12 +144,16 @@ public class SignupController {
 
 
     private void showAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setContentText(message);
-        alert.setHeaderText(null);
-        alert.showAndWait();
+        showAlert("Info", null, message);
     }
 
+    private void showAlert(String title, String header, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 
     private void showAlert(Alert.AlertType type, String title, String message) {
         Alert alert = new Alert(type);
