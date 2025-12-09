@@ -6,7 +6,7 @@
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.peakplatesapp.DashboardController"
+            fx:controller="com.example.peakplatesapp.ShareRecipeController"
             prefHeight="800.0" prefWidth="1000.0">
 
     <!-- Top Section -->
@@ -17,24 +17,21 @@
             </padding>
 
             <HBox spacing="20" alignment="CENTER_LEFT">
-                <Label fx:id="welcomeLabel" text="Welcome!"
-                       style="-fx-font-size: 24; -fx-font-weight: bold;"/>
+                <Label text="Share Recipe" style="-fx-font-size: 24; -fx-font-weight: bold;"/>
                 <Region HBox.hgrow="ALWAYS"/>
-                <Button text="📤 Upload Recipe"
-                        style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-padding: 10 20;"
-                        onAction="#handleUploadRecipe"/>
+                <Label fx:id="recipeNameLabel" text="Recipe: " style="-fx-font-size: 14; -fx-text-fill: #666;"/>
             </HBox>
         </VBox>
     </top>
 
-    <!-- Recipes Section -->
+    <!-- Users List Section -->
     <center>
         <ScrollPane fitToWidth="true" hbarPolicy="NEVER">
-            <VBox fx:id="recipesContainer" spacing="20" style="-fx-background-color: white;">
+            <VBox fx:id="usersContainer" spacing="10" style="-fx-background-color: white;">
                 <padding>
                     <Insets top="20" bottom="20" left="20" right="20"/>
                 </padding>
-                <Label text="Loading recipes..." style="-fx-font-size: 16; -fx-text-fill: #999;"/>
+                <Label text="Loading users..." style="-fx-font-size: 16; -fx-text-fill: #999;"/>
             </VBox>
         </ScrollPane>
     </center>
@@ -46,11 +43,10 @@
                 <Insets top="10" bottom="10" left="20" right="20"/>
             </padding>
 
-            <Button text="❤️ Favorites" style="-fx-font-size: 12;" onAction="#handleViewFavorites"/>
+            <Button text="🏠 Dashboard" style="-fx-font-size: 12; -fx-padding: 8 15;" onAction="#handleBackToDashboard"/>
+            <Button text="❤️ Favorites" style="-fx-font-size: 12; -fx-padding: 8 15;" onAction="#handleViewFavorites"/>
             <Button text="📨 Shared with Me" style="-fx-font-size: 12; -fx-padding: 8 15;" onAction="#handleViewSharedWithMe"/>
-            <Button text="🚪 Logout"
-                    style="-fx-font-size: 12; -fx-padding: 8 15; -fx-background-color: #f44336; -fx-text-fill: white;"
-                    onAction="#handleLogout"/>
+            <Button text="🚪 Logout" style="-fx-font-size: 12; -fx-padding: 8 15; -fx-background-color: #f44336; -fx-text-fill: white;" onAction="#handleLogout"/>
         </HBox>
     </bottom>
 </BorderPane>
