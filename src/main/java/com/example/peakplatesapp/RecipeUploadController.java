@@ -19,14 +19,18 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.UUID;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.control.CheckBox;
 
 public class RecipeUploadController {
 
     @FXML private TextField titleField;
-    @FXML private TextArea descriptionField;
+    @FXML private TextArea ingredientsField;
+    @FXML private TextArea stepsField;
     @FXML private Button chooseImageButton;
     @FXML private ImageView imagePreview;
     @FXML private Label selectedImageLabel;
+    @FXML private FlowPane tagsContainer;
 
     private File selectedImageFile;
 
@@ -46,9 +50,7 @@ public class RecipeUploadController {
         this.username = username;
     }
 
-    // --------------------------
     // CHOOSE IMAGE
-    // --------------------------
     @FXML
     private void handleChooseImage() {
         FileChooser chooser = new FileChooser();
@@ -59,10 +61,30 @@ public class RecipeUploadController {
         if (file != null) {
             selectedImageFile = file;
             chooseImageButton.setText("Image Selected ✔");
+            
+            // Show file size information
+            long fileSizeBytes = file.length();
+            long maxSizeBytes = 1048576;  // 1 MB
+            double fileSizeMB = fileSizeBytes / (1024.0 * 1024.0);
+            String sizeText = file.getName() + " (" + String.format("%.2f MB", fileSizeMB) + ")";
+            
+            if (fileSizeBytes > maxSizeBytes) {
+                sizeText += " ⚠️ TOO LARGE - Max 1 MB";
+                if (selectedImageLabel != null) {
+                    selectedImageLabel.setStyle("-fx-text-fill: #d32f2f;");
+                    selectedImageLabel.setText(sizeText);
+                }
+            } else {
+                if (selectedImageLabel != null) {
+                    selectedImageLabel.setStyle("-fx-text-fill: #388e3c;");
+                    selectedImageLabel.setText(sizeText);
+                }
+            }
+            
             try {
-                if (selectedImageLabel != null) selectedImageLabel.setText(file.getName());
                 if (imagePreview != null) {
-                    Image img = new Image(new java.io.FileInputStream(file));
+                    // Use URI-based constructor which reliably handles file-based images (jpg/png)
+                    Image img = new Image(file.toURI().toString());
                     imagePreview.setImage(img);
                 }
             } catch (Exception e) {
@@ -125,16 +147,36 @@ public class RecipeUploadController {
         }
     }
 
-    // --------------------------
+    @FXML
+    private void handleViewFriends() {
+        try {
+            if (mainApp != null && userId != null) {
+                mainApp.switchToFriends(userId);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            showError("Failed to navigate to friends.");
+        }
+    }
+
     // UPLOAD RECIPE TO FIRESTORE & STORAGE
-    // --------------------------
     @FXML
     private void handleUpload() {
         String title = titleField.getText() == null ? "" : titleField.getText().trim();
-        String description = descriptionField.getText() == null ? "" : descriptionField.getText().trim();
+        String ingredients = ingredientsField.getText() == null ? "" : ingredientsField.getText().trim();
+        String steps = stepsField.getText() == null ? "" : stepsField.getText().trim();
 
-        if (title.isEmpty() || description.isEmpty() || selectedImageFile == null) {
-            showError("Please fill all fields and choose an image.");
+        if (title.isEmpty() || ingredients.isEmpty() || steps.isEmpty() || selectedImageFile == null) {
+            showError("Please fill all fields: name, ingredients, steps and choose an image.");
+            return;
+        }
+
+        // Validate image size (max 1MB for Firestore)
+        long fileSizeBytes = selectedImageFile.length();
+        long maxSizeBytes = 1048576;  // 1 MB
+        if (fileSizeBytes > maxSizeBytes) {
+            double fileSizeMB = fileSizeBytes / (1024.0 * 1024.0);
+            showError(String.format("Image too large! File size: %.2f MB\nMaximum allowed: 1 MB\n\nPlease choose a smaller image.", fileSizeMB));
             return;
         }
 
@@ -142,7 +184,25 @@ public class RecipeUploadController {
         recipe.setUserId(userId);
         recipe.setUsername(username);
         recipe.setTitle(title);
-        recipe.setDescription(description);
+        // Description intentionally left empty now - using ingredients & steps instead
+        recipe.setDescription("");
+        recipe.setIngredients(ingredients);
+        recipe.setSteps(steps);
+        // Collect selected tags from the tagsContainer checkboxes
+        try {
+            java.util.List<String> tags = new java.util.ArrayList<>();
+            if (tagsContainer != null) {
+                for (javafx.scene.Node n : tagsContainer.getChildren()) {
+                    if (n instanceof CheckBox) {
+                        CheckBox cb = (CheckBox) n;
+                        if (cb.isSelected()) tags.add(cb.getText());
+                    }
+                }
+            }
+            recipe.setTags(tags);
+        } catch (Exception ex) {
+            System.err.println("Failed to collect tags: " + ex.getMessage());
+        }
 
         // Generate Firestore document ID
         Firestore db = FirestoreContext.getFirestore();
@@ -189,9 +249,7 @@ public class RecipeUploadController {
         }, "recipe-upload-thread").start();
     }
 
-    // --------------------------
     // HELPER ALERT METHODS
-    // --------------------------
     private void showError(String msg) {
         Alert a = new Alert(Alert.AlertType.ERROR, msg);
         a.showAndWait();

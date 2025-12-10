@@ -18,13 +18,12 @@ public class Launcher {
         } catch (ClassNotFoundException e) {
             System.err.println("JavaFX classes not found on the classpath.");
             System.err.println("Two options to run:");
-            System.err.println("  1) Configure IntelliJ run configuration with JavaFX SDK or add VM options (recommended). See README_INTELLIJ.md");
+            System.err.println("  1) Configure IntelliJ run configuration with JavaFX SDK or add VM options (recommended).");
             System.err.println("  2) Let the project run via Maven (this will run './mvnw clean javafx:run').");
             System.err.println("Attempting to run via Maven wrapper './mvnw javafx:run'...");
 
             try {
                 ProcessBuilder pb = new ProcessBuilder();
-                // Use platform-appropriate mvnw
                 String wrapper = "./mvnw";
                 if (System.getProperty("os.name").toLowerCase().contains("win")) {
                     wrapper = "mvnw.cmd";

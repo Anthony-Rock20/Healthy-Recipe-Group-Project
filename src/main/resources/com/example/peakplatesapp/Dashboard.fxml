@@ -9,22 +9,46 @@
             fx:controller="com.example.peakplatesapp.DashboardController"
             prefHeight="800.0" prefWidth="1000.0">
 
-    <!-- Top Section -->
+    <!-- Top Section: BorderPane with sticky search/filter -->
     <top>
-        <VBox spacing="15" style="-fx-background-color: #f5f5f5;">
-            <padding>
-                <Insets top="20" bottom="20" left="20" right="20"/>
-            </padding>
-
-            <HBox spacing="20" alignment="CENTER_LEFT">
-                <Label fx:id="welcomeLabel" text="Welcome!"
-                       style="-fx-font-size: 24; -fx-font-weight: bold;"/>
-                <Region HBox.hgrow="ALWAYS"/>
-                <Button text="📤 Upload Recipe"
-                        style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-padding: 10 20;"
-                        onAction="#handleUploadRecipe"/>
-            </HBox>
-        </VBox>
+        <BorderPane style="-fx-background-color: #f5f5f5;">
+            <!-- Welcome and Upload Button (always visible) -->
+            <top>
+                <VBox spacing="15" style="-fx-background-color: #f5f5f5;">
+                    <padding>
+                        <Insets top="20" bottom="20" left="20" right="20"/>
+                    </padding>
+                    <HBox spacing="20" alignment="CENTER_LEFT">
+                        <Label fx:id="welcomeLabel" text="Welcome!"
+                               style="-fx-font-size: 24; -fx-font-weight: bold;"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button text="📤 Upload Recipe"
+                                style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-padding: 10 20;"
+                                onAction="#handleUploadRecipe"/>
+                    </HBox>
+                </VBox>
+            </top>
+            <!-- Search and Filter (sticky at top, below welcome) -->
+            <bottom>
+                <VBox spacing="10" style="-fx-background-color: #ffffff; -fx-border-color: #ddd; -fx-border-width: 0 0 1 0;">
+                    <padding>
+                        <Insets top="15" bottom="15" left="20" right="20"/>
+                    </padding>
+                    <!-- Search Bar -->
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <TextField fx:id="searchField" promptText="🔍 Search recipes by name..." prefWidth="400" onKeyReleased="#handleSearch"/>
+                        <Button text="Clear" style="-fx-font-size: 12;" onAction="#handleClearSearch"/>
+                    </HBox>
+                    <!-- Filter Tags -->
+                    <Label text="Filter by Tags:" style="-fx-font-size: 12; -fx-font-weight: bold;"/>
+                    <ScrollPane fitToHeight="true" hbarPolicy="AS_NEEDED" vbarPolicy="NEVER" prefHeight="56" style="-fx-background-color: transparent; -fx-padding: 4 0 4 0;">
+                        <content>
+                            <FlowPane fx:id="filterTagsContainer" hgap="8" vgap="8" prefWrapLength="900"/>
+                        </content>
+                    </ScrollPane>
+                </VBox>
+            </bottom>
+        </BorderPane>
     </top>
 
     <!-- Recipes Section -->
@@ -47,6 +71,7 @@
             </padding>
 
             <Button text="❤️ Favorites" style="-fx-font-size: 12;" onAction="#handleViewFavorites"/>
+            <Button text="👥 Friends" style="-fx-font-size: 12; -fx-padding: 8 15; -fx-background-color: #9C27B0; -fx-text-fill: white;" onAction="#handleViewFriends"/>
             <Button text="📨 Shared with Me" style="-fx-font-size: 12; -fx-padding: 8 15;" onAction="#handleViewSharedWithMe"/>
             <Button text="🚪 Logout"
                     style="-fx-font-size: 12; -fx-padding: 8 15; -fx-background-color: #f44336; -fx-text-fill: white;"

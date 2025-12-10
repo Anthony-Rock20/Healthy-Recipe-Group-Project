@@ -89,9 +89,7 @@ public class MainApp extends Application {
         scene.setRoot(root);
     }
 
-    // ---------------------------
     // Login → Dashboard navigation
-    // ---------------------------
     public void switchToDashboard(String userId, String username) throws IOException {
         FXMLLoader loader = new FXMLLoader(
                 MainApp.class.getResource("/com/example/peakplatesapp/Dashboard.fxml")
@@ -106,9 +104,7 @@ public class MainApp extends Application {
         scene.setRoot(root);
     }
 
-    // ---------------------------
     // Dashboard → Upload Recipe
-    // ---------------------------
     public void switchToUploadRecipe(String userId, String username) throws IOException {
 
         FXMLLoader loader = new FXMLLoader(
@@ -125,16 +121,13 @@ public class MainApp extends Application {
         scene.setRoot(root);
     }
 
-    /**
-     * Backwards-compatible switchToDashboard overload used by older callers.
-     */
+    //Backwards-compatible switchToDashboard overload used by older callers.
     public void switchToDashboard(String userId) throws IOException {
         switchToDashboard(userId, null);
     }
 
-    // ---------------------------
+
     // Dashboard → Favorites
-    // ---------------------------
     public void switchToFavorites(String userId) throws IOException {
         FXMLLoader loader = new FXMLLoader(
                 MainApp.class.getResource("/com/example/peakplatesapp/Favorites.fxml")
@@ -149,9 +142,7 @@ public class MainApp extends Application {
         scene.setRoot(root);
     }
 
-    // ---------------------------
     // Share Recipe Page
-    // ---------------------------
     public void switchToShareRecipe(String userId, Recipe recipe) throws IOException {
         FXMLLoader loader = new FXMLLoader(
                 MainApp.class.getResource("/com/example/peakplatesapp/ShareRecipe.fxml")
@@ -167,9 +158,7 @@ public class MainApp extends Application {
         scene.setRoot(root);
     }
 
-    // ---------------------------
     // Shared with Me Page
-    // ---------------------------
     public void switchToSharedWithMe(String userId) throws IOException {
         FXMLLoader loader = new FXMLLoader(
                 MainApp.class.getResource("/com/example/peakplatesapp/SharedWithMe.fxml")
@@ -180,6 +169,36 @@ public class MainApp extends Application {
         controller.setMainApp(this);
         controller.setUserId(userId);
         controller.loadSharedRecipes();
+
+        scene.setRoot(root);
+    }
+
+    // Friends Page
+    public void switchToFriends(String userId) throws IOException {
+        FXMLLoader loader = new FXMLLoader(
+                MainApp.class.getResource("/com/example/peakplatesapp/Friends.fxml")
+        );
+        Parent root = loader.load();
+
+        FriendsController controller = loader.getController();
+        controller.setMainApp(this);
+        controller.setUserId(userId);
+        controller.loadFriends();
+
+        scene.setRoot(root);
+    }
+
+    // Friend Requests Page
+    public void switchToFriendRequests(String userId) throws IOException {
+        FXMLLoader loader = new FXMLLoader(
+                MainApp.class.getResource("/com/example/peakplatesapp/FriendRequests.fxml")
+        );
+        Parent root = loader.load();
+
+        FriendRequestsController controller = loader.getController();
+        controller.setMainApp(this);
+        controller.setUserId(userId);
+        controller.loadRequests();
 
         scene.setRoot(root);
     }

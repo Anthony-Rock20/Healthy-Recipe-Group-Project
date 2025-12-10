@@ -25,6 +25,27 @@
                 <Region HBox.hgrow="ALWAYS"/>
                 <Label fx:id="favoriteCountLabel" text="0 favorites" style="-fx-font-size: 14; -fx-text-fill: #666;"/>
             </HBox>
+
+            <!-- Search and Filter Section -->
+            <VBox spacing="10" style="-fx-background-color: #ffffff; -fx-border-color: #ddd; -fx-border-width: 1 0 0 0;">
+                <padding>
+                    <Insets top="10" bottom="10" left="20" right="20"/>
+                </padding>
+
+                <!-- Search Bar -->
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <TextField fx:id="searchField" promptText="🔍 Search favorites by name..." prefWidth="400" onKeyReleased="#handleSearch"/>
+                    <Button text="Clear" style="-fx-font-size: 12;" onAction="#handleClearSearch"/>
+                </HBox>
+
+                <!-- Filter Tags -->
+                <Label text="Filter by Tags:" style="-fx-font-size: 12; -fx-font-weight: bold;"/>
+                <ScrollPane fitToHeight="true" hbarPolicy="AS_NEEDED" vbarPolicy="NEVER" prefHeight="56" style="-fx-background-color: transparent; -fx-padding: 4 0 4 0;">
+                    <content>
+                        <FlowPane fx:id="filterTagsContainer" hgap="8" vgap="8" prefWrapLength="900"/>
+                    </content>
+                </ScrollPane>
+            </VBox>
         </VBox>
     </top>
 
@@ -48,6 +69,7 @@
             </padding>
 
             <Button text="📤 Upload Recipe" style="-fx-font-size: 12; -fx-padding: 8 15;" onAction="#handleUploadRecipe"/>
+            <Button text="👥 Friends" style="-fx-font-size: 12; -fx-padding: 8 15; -fx-background-color: #9C27B0; -fx-text-fill: white;" onAction="#handleViewFriends"/>
             <Button text="📨 Shared with Me" style="-fx-font-size: 12; -fx-padding: 8 15;" onAction="#handleViewSharedWithMe"/>
             <Button text="🚪 Logout" onAction="#handleLogout"
                     style="-fx-font-size: 12; -fx-padding: 8 15; -fx-background-color: #f44336; -fx-text-fill: white;"/>

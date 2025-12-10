@@ -108,7 +108,11 @@ public class ShareRecipeController {
         shareButton.setStyle("-fx-font-size: 12; -fx-padding: 8 15; -fx-background-color: #2196F3; -fx-text-fill: white;");
         shareButton.setOnAction(e -> handleShareWithUser(userId, username));
 
-        card.getChildren().addAll(userLabel, shareButton);
+        Button friendRequestButton = new Button("➕ Friend Request");
+        friendRequestButton.setStyle("-fx-font-size: 12; -fx-padding: 8 15; -fx-background-color: #9C27B0; -fx-text-fill: white;");
+        friendRequestButton.setOnAction(e -> handleSendFriendRequest(userId, username));
+
+        card.getChildren().addAll(userLabel, shareButton, friendRequestButton);
         return card;
     }
 
@@ -185,6 +189,69 @@ public class ShareRecipeController {
             e.printStackTrace();
             showAlert("Error", "Cannot navigate to favorites.");
         }
+    }
+
+    @FXML
+    public void handleViewFriends() {
+        try {
+            if (mainApp != null && userId != null) {
+                mainApp.switchToFriends(userId);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Error", "Cannot navigate to friends.");
+        }
+    }
+
+    private void handleSendFriendRequest(String targetUserId, String targetUsername) {
+        new Thread(() -> {
+            try {
+                // Check if friend request already exists
+                QuerySnapshot existingRequest = FirestoreContext.getFirestore()
+                        .collection("friendRequests")
+                        .whereEqualTo("fromUserId", userId)
+                        .whereEqualTo("toUserId", targetUserId)
+                        .get()
+                        .get();
+
+                if (!existingRequest.isEmpty()) {
+                    Platform.runLater(() -> showAlert("Info", "Friend request already sent to " + targetUsername + "."));
+                    return;
+                }
+
+                // Get current user's username
+                String currentUsername = FirestoreContext.getFirestore()
+                        .collection("users")
+                        .document(userId)
+                        .get()
+                        .get()
+                        .getString("username");
+
+                // Create friend request
+                String requestId = FirestoreContext.getFirestore().collection("friendRequests").document().getId();
+                FriendRequest friendRequest = new FriendRequest(
+                        userId,
+                        currentUsername,
+                        targetUserId,
+                        targetUsername
+                );
+                friendRequest.setId(requestId);
+
+                FirestoreContext.getFirestore()
+                        .collection("friendRequests")
+                        .document(requestId)
+                        .set(friendRequest)
+                        .get();
+
+                Platform.runLater(() -> {
+                    showAlert("Success", "Friend request sent to " + targetUsername + "!");
+                    loadUsers();
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+                Platform.runLater(() -> showAlert("Error", "Failed to send friend request: " + e.getMessage()));
+            }
+        }).start();
     }
 
     @FXML

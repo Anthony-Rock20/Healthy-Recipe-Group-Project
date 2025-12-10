@@ -80,10 +80,7 @@ public class FirestoreContext {
         }
     }
 
-    /**
-     * Quick check whether credentials file is present and can be parsed.
-     * Returns null if OK, otherwise returns a human-readable error message.
-     */
+    // Quick check whether credentials file is present and can be parsed. Returns null if OK, otherwise returns a human-readable error message.
     public static String credentialsHealthCheck() {
         try {
             InputStream stream = FirestoreContext.class.getResourceAsStream("/com/example/peakplatesapp/key.json");
