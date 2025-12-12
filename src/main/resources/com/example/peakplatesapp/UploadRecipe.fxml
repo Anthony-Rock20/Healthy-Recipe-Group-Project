@@ -49,7 +49,7 @@
                                style="-fx-font-size: 14; -fx-text-fill: #999;"/>
                     </StackPane>
 
-                        <Button fx:id="chooseImageButton" text="🖼️ Choose Image"
+                    <Button fx:id="chooseImageButton" text="🖼️ Choose Image"
                             style="-fx-background-color: #2196F3; -fx-text-fill: white;"
                             onAction="#handleSelectImage"/>
                     <Label fx:id="selectedImageLabel"
@@ -64,7 +64,28 @@
                 <VBox spacing="10">
                     <Label text="📛 Recipe Name" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
                     <TextField fx:id="titleField" promptText="e.g. Classic Lasagna"/>
-                    <!-- Tags selection goes between name and description -->
+
+                    <!-- Dietary Info Row -->
+                    <HBox spacing="10">
+                        <VBox spacing="4">
+                            <Label text="Calories"/>
+                            <TextField fx:id="caloriesField" promptText="kcal"/>
+                        </VBox>
+                        <VBox spacing="4">
+                            <Label text="Protein (g)"/>
+                            <TextField fx:id="proteinField" promptText="g"/>
+                        </VBox>
+                        <VBox spacing="4">
+                            <Label text="Carbs (g)"/>
+                            <TextField fx:id="carbField" promptText="g"/>
+                        </VBox>
+                        <VBox spacing="4">
+                            <Label text="Fats (g)"/>
+                            <TextField fx:id="fatField" promptText="g"/>
+                        </VBox>
+                    </HBox>
+
+                    <!-- Tags selection -->
                     <Label text="🏷️ Tags (select multiple)" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
                     <FlowPane fx:id="tagsContainer" hgap="8" vgap="8">
                         <children>
@@ -101,7 +122,7 @@
                     <Label text="👨‍🍳 Steps" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
                     <TextArea fx:id="stepsField" wrapText="true" prefRowCount="6" promptText="List each step on a new line:&#10;1. Preheat oven to 350°F&#10;2. Mix dry ingredients&#10;3. Add wet ingredients..."/>
 
-                          <!-- Description removed: replaced by Ingredients + Steps -->
+                    <!-- Description removed: replaced by Ingredients + Steps -->
                 </VBox>
 
                 <!-- Buttons -->

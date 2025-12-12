@@ -28,7 +28,7 @@ public class FavoritesController {
     private TextField searchField;
     @FXML
     private FlowPane filterTagsContainer;
-    
+
     private MainApp mainApp;
     private String userId;
     private List<Recipe> allFavorites = new ArrayList<>();
@@ -174,7 +174,7 @@ public class FavoritesController {
         for (Recipe recipe : allFavorites) {
             // Check name match
             boolean nameMatches = recipe.getTitle() != null && recipe.getTitle().toLowerCase().contains(searchQuery);
-            
+
             // Check tag matches
             boolean tagsMatch = true;
             if (!selectedTags.isEmpty()) {

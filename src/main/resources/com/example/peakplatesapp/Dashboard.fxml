@@ -25,6 +25,9 @@
                         <Button text="📤 Upload Recipe"
                                 style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-padding: 10 20;"
                                 onAction="#handleUploadRecipe"/>
+                        <Button text="🏠 Home"
+                                style="-fx-background-color: #00C7D9; -fx-text-fill: white; -fx-padding: 10 20;"
+                                onAction="#handleViewHome"/>
                     </HBox>
                 </VBox>
             </top>

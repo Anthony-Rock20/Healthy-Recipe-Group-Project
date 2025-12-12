@@ -153,7 +153,7 @@ public class SharedWithMeController {
         for (Recipe recipe : allSharedRecipes) {
             // Check name match
             boolean nameMatches = recipe.getTitle() != null && recipe.getTitle().toLowerCase().contains(searchQuery);
-            
+
             // Check tag matches
             boolean tagsMatch = true;
             if (!selectedTags.isEmpty()) {
@@ -405,7 +405,7 @@ public class SharedWithMeController {
         }
     }
 
-    
+
 
     @FXML
     public void handleBackToDashboard() {

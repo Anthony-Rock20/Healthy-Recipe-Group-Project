@@ -17,9 +17,9 @@
             <padding>
                 <Insets top="20" bottom="20" left="20" right="20"/>
             </padding>
-            
+
             <HBox spacing="20" alignment="CENTER_LEFT">
-                <Button text="⬅️ Back to Dashboard" onAction="#handleBackToDashboard" 
+                <Button text="⬅️ Back to Dashboard" onAction="#handleBackToDashboard"
                         style="-fx-font-size: 12; -fx-padding: 8 15; -fx-background-color: #2196F3; -fx-text-fill: white;"/>
                 <Label text="My Favorite Recipes" style="-fx-font-size: 24; -fx-font-weight: bold;"/>
                 <Region HBox.hgrow="ALWAYS"/>

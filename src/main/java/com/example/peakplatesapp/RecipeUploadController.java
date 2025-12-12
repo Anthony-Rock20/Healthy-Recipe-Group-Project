@@ -31,6 +31,11 @@ public class RecipeUploadController {
     @FXML private ImageView imagePreview;
     @FXML private Label selectedImageLabel;
     @FXML private FlowPane tagsContainer;
+    @FXML private TextField caloriesField;
+    @FXML private TextField proteinField;
+    @FXML private TextField carbField;
+    @FXML private TextField fatField;
+
 
     private File selectedImageFile;
 
@@ -61,13 +66,13 @@ public class RecipeUploadController {
         if (file != null) {
             selectedImageFile = file;
             chooseImageButton.setText("Image Selected ✔");
-            
+
             // Show file size information
             long fileSizeBytes = file.length();
             long maxSizeBytes = 1048576;  // 1 MB
             double fileSizeMB = fileSizeBytes / (1024.0 * 1024.0);
             String sizeText = file.getName() + " (" + String.format("%.2f MB", fileSizeMB) + ")";
-            
+
             if (fileSizeBytes > maxSizeBytes) {
                 sizeText += " ⚠️ TOO LARGE - Max 1 MB";
                 if (selectedImageLabel != null) {
@@ -80,7 +85,7 @@ public class RecipeUploadController {
                     selectedImageLabel.setText(sizeText);
                 }
             }
-            
+
             try {
                 if (imagePreview != null) {
                     // Use URI-based constructor which reliably handles file-based images (jpg/png)
@@ -162,6 +167,7 @@ public class RecipeUploadController {
     // UPLOAD RECIPE TO FIRESTORE & STORAGE
     @FXML
     private void handleUpload() {
+        // Get text input from fields
         String title = titleField.getText() == null ? "" : titleField.getText().trim();
         String ingredients = ingredientsField.getText() == null ? "" : ingredientsField.getText().trim();
         String steps = stepsField.getText() == null ? "" : stepsField.getText().trim();
@@ -171,31 +177,47 @@ public class RecipeUploadController {
             return;
         }
 
-        // Validate image size (max 1MB for Firestore)
-        long fileSizeBytes = selectedImageFile.length();
-        long maxSizeBytes = 1048576;  // 1 MB
-        if (fileSizeBytes > maxSizeBytes) {
-            double fileSizeMB = fileSizeBytes / (1024.0 * 1024.0);
-            showError(String.format("Image too large! File size: %.2f MB\nMaximum allowed: 1 MB\n\nPlease choose a smaller image.", fileSizeMB));
+        // Parse dietary info safely
+        int calories, protein, carbs, fats;
+        try {
+            calories = Integer.parseInt(caloriesField.getText().trim());
+            protein = Integer.parseInt(proteinField.getText().trim());
+            carbs = Integer.parseInt(carbField.getText().trim());
+            fats = Integer.parseInt(fatField.getText().trim());
+        } catch (NumberFormatException e) {
+            showError("Please enter valid numbers for calories, protein, carbs, and fats.");
             return;
         }
 
+        // Validate image size (max 1MB for Firestore)
+        long fileSizeBytes = selectedImageFile.length();
+        long maxSizeBytes = 1048576; // 1 MB
+        if (fileSizeBytes > maxSizeBytes) {
+            double fileSizeMB = fileSizeBytes / (1024.0 * 1024.0);
+            showError(String.format("Image too large! File size: %.2f MB\nMaximum allowed: 1 MB", fileSizeMB));
+            return;
+        }
+
+        // Create Recipe object
         Recipe recipe = new Recipe();
         recipe.setUserId(userId);
         recipe.setUsername(username);
         recipe.setTitle(title);
-        // Description intentionally left empty now - using ingredients & steps instead
-        recipe.setDescription("");
         recipe.setIngredients(ingredients);
         recipe.setSteps(steps);
-        // Collect selected tags from the tagsContainer checkboxes
+        recipe.setDescription(""); // optional, description left empty
+        recipe.setCalories(calories);
+        recipe.setProtein(protein);
+        recipe.setCarbs(carbs);
+        recipe.setFats(fats);
+
+        // Collect selected tags
         try {
             java.util.List<String> tags = new java.util.ArrayList<>();
             if (tagsContainer != null) {
                 for (javafx.scene.Node n : tagsContainer.getChildren()) {
-                    if (n instanceof CheckBox) {
-                        CheckBox cb = (CheckBox) n;
-                        if (cb.isSelected()) tags.add(cb.getText());
+                    if (n instanceof CheckBox cb && cb.isSelected()) {
+                        tags.add(cb.getText());
                     }
                 }
             }
@@ -209,32 +231,30 @@ public class RecipeUploadController {
         DocumentReference ref = db.collection("recipes").document();
         recipe.setId(ref.getId());
 
-        // Show a non-blocking progress alert
+        // Show uploading progress alert
         Alert progressAlert = new Alert(Alert.AlertType.INFORMATION);
         progressAlert.setTitle("Uploading");
         progressAlert.setHeaderText(null);
         progressAlert.setContentText("Uploading your recipe...");
-        try {
-            if (mainApp != null && mainApp.getStage() != null) progressAlert.initOwner(mainApp.getStage());
-        } catch (Exception ignored) {}
+        try { if (mainApp != null && mainApp.getStage() != null) progressAlert.initOwner(mainApp.getStage()); } catch (Exception ignored) {}
         progressAlert.show();
 
-        // Upload image data and metadata in background thread
+        // Upload image and metadata in background thread
         new Thread(() -> {
             try {
-                // Read image bytes and attach to recipe as Firestore Blob
+                // Convert image file to Firestore Blob
                 byte[] imageBytes = Files.readAllBytes(selectedImageFile.toPath());
                 recipe.setImageData(com.google.cloud.firestore.Blob.fromBytes(imageBytes));
 
-                // Save recipe metadata (including image bytes) in Firestore
+                // Save recipe to Firestore
                 ref.set(recipe).get();
 
+                // Notify user on FX thread
                 Platform.runLater(() -> {
                     try { progressAlert.close(); } catch (Exception ignored) {}
                     showInfo("Recipe uploaded successfully!");
-                    try {
-                        mainApp.switchToDashboard(userId, username);
-                    } catch (Exception e) {
+                    try { mainApp.switchToDashboard(userId, username); }
+                    catch (Exception e) {
                         e.printStackTrace();
                         showError("Upload succeeded but failed to navigate to dashboard.");
                     }

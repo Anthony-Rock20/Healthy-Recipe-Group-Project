@@ -9,30 +9,30 @@ import java.util.List;
 public class Tags {
     // Predefined list of available tags
     public static final List<String> AVAILABLE_TAGS = Arrays.asList(
-        // New tags
-        "Weight Loss",
-        "Muscle Gain",
-        "Diabetic Friendly",
-        "Vegetarian",
-        "Dairy Free",
-        "Anti-Inflammatory",
-        "Nut Free",
-        "Soy Free",
-        "High Antioxidants",
-        "Immunity Boosting",
-        // Original tags
-        "Whole Grains",
-        "Greens",
-        "High Protein",
-        "High Fiber",
-        "Low Calories",
-        "Vegan",
-        "Gluten Free",
-        "Heart Healthy",
-        "Low Sugar",
-        "Low Sodium",
-        "Gut Friendly",
-        "No Added Sugar"
+            // New tags
+            "Weight Loss",
+            "Muscle Gain",
+            "Diabetic Friendly",
+            "Vegetarian",
+            "Dairy Free",
+            "Anti-Inflammatory",
+            "Nut Free",
+            "Soy Free",
+            "High Antioxidants",
+            "Immunity Boosting",
+            // Original tags
+            "Whole Grains",
+            "Greens",
+            "High Protein",
+            "High Fiber",
+            "Low Calories",
+            "Vegan",
+            "Gluten Free",
+            "Heart Healthy",
+            "Low Sugar",
+            "Low Sodium",
+            "Gut Friendly",
+            "No Added Sugar"
     );
 
     // Private constructor to prevent instantiation

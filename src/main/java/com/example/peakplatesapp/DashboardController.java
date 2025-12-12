@@ -1,6 +1,7 @@
 package com.example.peakplatesapp;
 
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -158,7 +159,7 @@ public class DashboardController {
         for (Recipe recipe : allRecipes) {
             // Check name match
             boolean nameMatches = recipe.getTitle() != null && recipe.getTitle().toLowerCase().contains(searchQuery);
-            
+
             // Check tag matches
             boolean tagsMatch = true;
             if (!selectedTags.isEmpty()) {
@@ -305,7 +306,7 @@ public class DashboardController {
                     .get();
 
             loadRecipes();
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -326,45 +327,42 @@ public class DashboardController {
     // VIEW RECIPE DETAILS
     private void showRecipeDetails(Recipe recipe) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(recipe.getTitle());
+        alert.setTitle(recipe.getTitle() != null ? recipe.getTitle() : "Recipe Details");
         alert.setHeaderText(null);
 
-        // Build content: title first, then image, then username, then description
-        javafx.scene.layout.VBox content = new javafx.scene.layout.VBox(10);
+        // Main container
+        VBox content = new VBox(10);
         content.setPrefWidth(420);
 
-        // Add recipe title at the top of content
+        // Recipe title
         Label titleLabel = new Label(recipe.getTitle() != null ? recipe.getTitle() : "Untitled Recipe");
         titleLabel.setStyle("-fx-font-size: 20; -fx-font-weight: bold;");
         content.getChildren().add(titleLabel);
 
-        Image img = null;
+        // Recipe image
         if (recipe.getImageData() != null) {
             try {
                 byte[] bytes = recipe.getImageData().toBytes();
                 if (bytes != null && bytes.length > 0) {
-                    img = createImageFromBytes(bytes);
+                    Image img = createImageFromBytes(bytes);
+                    ImageView imageView = new ImageView(img);
+                    imageView.setFitWidth(380);
+                    imageView.setPreserveRatio(true);
+                    content.getChildren().add(imageView);
                 }
             } catch (Exception e) {
                 System.err.println("Image decode failed for recipe " + recipe.getId() + ": " + e.getMessage());
-                e.printStackTrace();
             }
         }
 
-        if (img != null) {
-            ImageView imageView = new ImageView(img);
-            imageView.setFitWidth(380);
-            imageView.setPreserveRatio(true);
-            content.getChildren().add(imageView);
-        }
-
+        // Username
         Label byLabel = new Label("By: " + (recipe.getUsername() != null ? recipe.getUsername() : "Unknown"));
         byLabel.setStyle("-fx-font-weight: bold; -fx-padding: 4 0 0 0;");
         content.getChildren().add(byLabel);
 
         // Tags
         if (recipe.getTags() != null && !recipe.getTags().isEmpty()) {
-            javafx.scene.layout.FlowPane tagsFlow = new javafx.scene.layout.FlowPane(8, 6);
+            FlowPane tagsFlow = new FlowPane(8, 6);
             for (String t : recipe.getTags()) {
                 Label tagLabel = new Label(t);
                 tagLabel.setStyle("-fx-background-color: #e0f2f1; -fx-padding: 4 8; -fx-border-radius: 4; -fx-background-radius: 4; -fx-font-size: 11;");
@@ -373,24 +371,46 @@ public class DashboardController {
             content.getChildren().add(tagsFlow);
         }
 
+        // Dietary Facts
+        if (recipe.getCalories() > 0 || recipe.getProtein() > 0 || recipe.getCarbs() > 0 || recipe.getFats() > 0) {
+            Label dietHeader = new Label("Dietary Facts:");
+            dietHeader.setStyle("-fx-font-weight: bold; -fx-padding: 6 0 0 0;");
+
+            HBox dietBox = new HBox(15);
+
+            Label calLabel = new Label("Calories: " + recipe.getCalories() + " kcal");
+            Label protLabel = new Label("Protein: " + recipe.getProtein() + " g");
+            Label carbLabel = new Label("Carbs: " + recipe.getCarbs() + " g");
+            Label fatLabel = new Label("Fats: " + recipe.getFats() + " g");
+
+            calLabel.setStyle("-fx-font-size: 12;");
+            protLabel.setStyle("-fx-font-size: 12;");
+            carbLabel.setStyle("-fx-font-size: 12;");
+            fatLabel.setStyle("-fx-font-size: 12;");
+
+            dietBox.getChildren().addAll(calLabel, protLabel, carbLabel, fatLabel);
+            content.getChildren().addAll(dietHeader, dietBox);
+        }
+
         // Ingredients
         if (recipe.getIngredients() != null && !recipe.getIngredients().isEmpty()) {
             Label ingHeader = new Label("Ingredients:");
             ingHeader.setStyle("-fx-font-weight: bold; -fx-padding: 6 0 0 0;");
-            javafx.scene.control.Label ing = new javafx.scene.control.Label(recipe.getIngredients());
-            ing.setWrapText(true);
-            content.getChildren().addAll(ingHeader, ing);
+            Label ingLabel = new Label(recipe.getIngredients());
+            ingLabel.setWrapText(true);
+            content.getChildren().addAll(ingHeader, ingLabel);
         }
 
         // Steps
         if (recipe.getSteps() != null && !recipe.getSteps().isEmpty()) {
             Label stepsHeader = new Label("Steps:");
             stepsHeader.setStyle("-fx-font-weight: bold; -fx-padding: 6 0 0 0;");
-            javafx.scene.control.Label st = new javafx.scene.control.Label(recipe.getSteps());
-            st.setWrapText(true);
-            content.getChildren().addAll(stepsHeader, st);
+            Label stepsLabel = new Label(recipe.getSteps());
+            stepsLabel.setWrapText(true);
+            content.getChildren().addAll(stepsHeader, stepsLabel);
         }
 
+        // Set content and show popup
         alert.getDialogPane().setContent(content);
         alert.getDialogPane().setPrefWidth(420);
         alert.showAndWait();
@@ -468,6 +488,18 @@ public class DashboardController {
         }
     }
 
+    @FXML
+    public void handleViewHome() {
+        if (mainApp != null && userId != null) {
+            try {
+                mainApp.switchToHome(userId);
+            } catch (Exception e) {
+                e.printStackTrace();
+                showAlert("Navigation error", "Cannot open Home.");
+            }
+        }
+    }
+
     private void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
@@ -500,4 +532,6 @@ public class DashboardController {
             return null;
         }
     }
+
+
 }

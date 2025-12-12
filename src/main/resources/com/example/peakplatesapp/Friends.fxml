@@ -41,11 +41,11 @@
 
                 <!-- Search Bar -->
                 <HBox spacing="10" alignment="CENTER_LEFT">
-                    <TextField fx:id="searchField" 
-                               promptText="Search for users to add..." 
+                    <TextField fx:id="searchField"
+                               promptText="Search for users to add..."
                                onKeyReleased="#handleSearch"
                                prefWidth="400"/>
-                    <Button text="🔍 Search" 
+                    <Button text="🔍 Search"
                             style="-fx-background-color: #9C27B0; -fx-text-fill: white;"
                             onAction="#handleSearch"/>
                 </HBox>

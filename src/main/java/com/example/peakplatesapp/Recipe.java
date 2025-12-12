@@ -24,6 +24,44 @@ public class Recipe implements Serializable {
     private List<String> sharedWith;
     private List<String> tags;
 
+    public int getProtein() {
+        return protein;
+    }
+
+    public void setProtein(int protein) {
+        this.protein = protein;
+    }
+
+    public int getFats() {
+        return fats;
+    }
+
+    public void setFats(int fats) {
+        this.fats = fats;
+    }
+
+    public int getCarbs() {
+        return carbs;
+    }
+
+    public void setCarbs(int carbs) {
+        this.carbs = carbs;
+    }
+
+    public int getCalories() {
+        return calories;
+    }
+
+    public void setCalories(int calories) {
+        this.calories = calories;
+    }
+
+    private int calories;
+    private int protein;
+    private int carbs;
+    private int fats;
+
+
     public Recipe() {
         this.likes = 0;
         this.favorites = 0;

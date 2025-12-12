@@ -65,7 +65,7 @@ public class ShareRecipeController {
                 for (QueryDocumentSnapshot doc : usersSnapshot.getDocuments()) {
                     String uid = doc.getId();
                     String username = doc.getString("username");
-                    
+
                     // Skip current user
                     if (!uid.equals(userId)) {
                         userIds.add(uid);

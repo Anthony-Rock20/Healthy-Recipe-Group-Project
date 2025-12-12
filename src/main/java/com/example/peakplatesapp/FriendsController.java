@@ -63,7 +63,7 @@ public class FriendsController {
                 for (QueryDocumentSnapshot doc : usersSnapshot.getDocuments()) {
                     String uid = doc.getId();
                     String username = doc.getString("username");
-                    
+
                     // Skip current user
                     if (!uid.equals(userId)) {
                         allUserIds.add(uid);
@@ -159,7 +159,7 @@ public class FriendsController {
     @FXML
     private void handleSearch() {
         String query = searchField.getText() != null ? searchField.getText().trim().toLowerCase() : "";
-        
+
         usersContainer.getChildren().clear();
         if (query.isEmpty()) {
             loadFriends();
@@ -182,7 +182,7 @@ public class FriendsController {
                 for (QueryDocumentSnapshot doc : usersSnapshot.getDocuments()) {
                     String uid = doc.getId();
                     String username = doc.getString("username");
-                    
+
                     if (!uid.equals(userId) && username != null && username.toLowerCase().contains(query)) {
                         matchIds.add(uid);
                         matchNames.add(username);
@@ -293,7 +293,7 @@ public class FriendsController {
         userLabel.setStyle("-fx-font-size: 14;");
 
         boolean isFriend = currentFriendIds.contains(targetUserId);
-        
+
         if (isFriend) {
             Button friendButton = new Button("✓ Friends");
             friendButton.setStyle("-fx-font-size: 12; -fx-padding: 8 15; -fx-background-color: #4CAF50; -fx-text-fill: white;");
