@@ -13,6 +13,8 @@ public class Recipe implements Serializable {
     private String title;
     private String imagePath;
     private Blob imageData;
+    private String ingredients;
+    private String steps;
     private long timestamp;
     private int likes;
     private int favorites;
@@ -20,6 +22,45 @@ public class Recipe implements Serializable {
     private List<String> likedByUsers;
     private List<String> favoriteByUsers;
     private List<String> sharedWith;
+    private List<String> tags;
+
+    public int getProtein() {
+        return protein;
+    }
+
+    public void setProtein(int protein) {
+        this.protein = protein;
+    }
+
+    public int getFats() {
+        return fats;
+    }
+
+    public void setFats(int fats) {
+        this.fats = fats;
+    }
+
+    public int getCarbs() {
+        return carbs;
+    }
+
+    public void setCarbs(int carbs) {
+        this.carbs = carbs;
+    }
+
+    public int getCalories() {
+        return calories;
+    }
+
+    public void setCalories(int calories) {
+        this.calories = calories;
+    }
+
+    private int calories;
+    private int protein;
+    private int carbs;
+    private int fats;
+
 
     public Recipe() {
         this.likes = 0;
@@ -28,6 +69,7 @@ public class Recipe implements Serializable {
         this.likedByUsers = new ArrayList<>();
         this.favoriteByUsers = new ArrayList<>();
         this.sharedWith = new ArrayList<>();
+        this.tags = new ArrayList<>();
         this.timestamp = System.currentTimeMillis();
     }
 
@@ -158,5 +200,30 @@ public class Recipe implements Serializable {
 
     public void setSharedWith(List<String> sharedWith) {
         this.sharedWith = sharedWith;
+    }
+
+    public List<String> getTags() {
+        if (tags == null) tags = new ArrayList<>();
+        return tags;
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
+    }
+
+    public String getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(String ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    public String getSteps() {
+        return steps;
+    }
+
+    public void setSteps(String steps) {
+        this.steps = steps;
     }
 }

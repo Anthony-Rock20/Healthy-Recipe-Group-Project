@@ -6,32 +6,34 @@
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.peakplatesapp.ShareRecipeController"
-            prefHeight="800.0" prefWidth="1000.0">
+            fx:controller="com.example.peakplatesapp.FriendRequestsController"
+            prefHeight="700" prefWidth="800">
 
-    <!-- Top Section -->
+    <!-- Top Banner -->
     <top>
-        <VBox spacing="15" style="-fx-background-color: #f5f5f5;">
+        <VBox spacing="10" style="-fx-background-color: #FF9800;">
             <padding>
                 <Insets top="20" bottom="20" left="20" right="20"/>
             </padding>
 
-            <HBox spacing="20" alignment="CENTER_LEFT">
-                <Label text="Share Recipe" style="-fx-font-size: 24; -fx-font-weight: bold;"/>
-                <Region HBox.hgrow="ALWAYS"/>
-                <Label fx:id="recipeNameLabel" text="Recipe: " style="-fx-font-size: 14; -fx-text-fill: #666;"/>
-            </HBox>
+            <Label text="Friend Requests"
+                   style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: white;"/>
+
+            <Label text="Manage your pending friend requests"
+                   style="-fx-font-size: 14; -fx-text-fill: #f0f0f0;"/>
         </VBox>
     </top>
 
-    <!-- Users List Section -->
+    <!-- Center: Requests List -->
     <center>
-        <ScrollPane fitToWidth="true" hbarPolicy="NEVER">
-            <VBox fx:id="usersContainer" spacing="10" style="-fx-background-color: white;">
+        <ScrollPane fitToWidth="true">
+            <VBox spacing="15" style="-fx-background-color: white;">
                 <padding>
                     <Insets top="20" bottom="20" left="20" right="20"/>
                 </padding>
-                <Label text="Loading users..." style="-fx-font-size: 16; -fx-text-fill: #999;"/>
+
+                <Label fx:id="requestCountLabel" text="Loading requests..." style="-fx-font-size: 12; -fx-text-fill: #666;"/>
+                <VBox fx:id="requestsContainer" spacing="10"/>
             </VBox>
         </ScrollPane>
     </center>

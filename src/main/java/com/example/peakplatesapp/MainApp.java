@@ -1,5 +1,6 @@
 package com.example.peakplatesapp;
 
+import com.google.cloud.firestore.DocumentSnapshot;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -7,6 +8,9 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
+
 import javafx.scene.control.Alert;
 
 public class MainApp extends Application {
@@ -35,22 +39,22 @@ public class MainApp extends Application {
 
         scene = new Scene(root);
         stage.setScene(scene);
-        stage.setTitle("Peak Plates - Login");
+        stage.setTitle("Peak Plates");
         stage.show();
-        
-            // If credentials look missing, show a non-blocking informational alert
-            try {
-                String credsCheck = FirestoreContext.credentialsHealthCheck();
-                if (credsCheck != null) {
-                    Alert info = new Alert(Alert.AlertType.WARNING);
-                    info.setTitle("Firebase Configuration");
-                    info.setHeaderText("Firebase credentials issue detected");
-                    info.setContentText(credsCheck + "\nPlace your service account JSON at src/main/resources/com/example/peakplatesapp/key.json or follow README_INTELLIJ.md");
-                    info.show();
-                }
-            } catch (Exception ex) {
-                System.err.println("Error checking Firebase credentials: " + ex.getMessage());
+
+        // If credentials look missing, show a non-blocking informational alert
+        try {
+            String credsCheck = FirestoreContext.credentialsHealthCheck();
+            if (credsCheck != null) {
+                Alert info = new Alert(Alert.AlertType.WARNING);
+                info.setTitle("Firebase Configuration");
+                info.setHeaderText("Firebase credentials issue detected");
+                info.setContentText(credsCheck + "\nPlace your service account JSON at src/main/resources/com/example/peakplatesapp/key.json or follow README_INTELLIJ.md");
+                info.show();
             }
+        } catch (Exception ex) {
+            System.err.println("Error checking Firebase credentials: " + ex.getMessage());
+        }
     }
 
     // ---------------------------
@@ -89,9 +93,7 @@ public class MainApp extends Application {
         scene.setRoot(root);
     }
 
-    // ---------------------------
     // Login → Dashboard navigation
-    // ---------------------------
     public void switchToDashboard(String userId, String username) throws IOException {
         FXMLLoader loader = new FXMLLoader(
                 MainApp.class.getResource("/com/example/peakplatesapp/Dashboard.fxml")
@@ -106,9 +108,7 @@ public class MainApp extends Application {
         scene.setRoot(root);
     }
 
-    // ---------------------------
     // Dashboard → Upload Recipe
-    // ---------------------------
     public void switchToUploadRecipe(String userId, String username) throws IOException {
 
         FXMLLoader loader = new FXMLLoader(
@@ -125,16 +125,13 @@ public class MainApp extends Application {
         scene.setRoot(root);
     }
 
-    /**
-     * Backwards-compatible switchToDashboard overload used by older callers.
-     */
+    //Backwards-compatible switchToDashboard overload used by older callers.
     public void switchToDashboard(String userId) throws IOException {
         switchToDashboard(userId, null);
     }
 
-    // ---------------------------
+
     // Dashboard → Favorites
-    // ---------------------------
     public void switchToFavorites(String userId) throws IOException {
         FXMLLoader loader = new FXMLLoader(
                 MainApp.class.getResource("/com/example/peakplatesapp/Favorites.fxml")
@@ -149,9 +146,7 @@ public class MainApp extends Application {
         scene.setRoot(root);
     }
 
-    // ---------------------------
     // Share Recipe Page
-    // ---------------------------
     public void switchToShareRecipe(String userId, Recipe recipe) throws IOException {
         FXMLLoader loader = new FXMLLoader(
                 MainApp.class.getResource("/com/example/peakplatesapp/ShareRecipe.fxml")
@@ -167,9 +162,7 @@ public class MainApp extends Application {
         scene.setRoot(root);
     }
 
-    // ---------------------------
     // Shared with Me Page
-    // ---------------------------
     public void switchToSharedWithMe(String userId) throws IOException {
         FXMLLoader loader = new FXMLLoader(
                 MainApp.class.getResource("/com/example/peakplatesapp/SharedWithMe.fxml")
@@ -181,6 +174,78 @@ public class MainApp extends Application {
         controller.setUserId(userId);
         controller.loadSharedRecipes();
 
+        scene.setRoot(root);
+    }
+
+    // Friends Page
+    public void switchToFriends(String userId) throws IOException {
+        FXMLLoader loader = new FXMLLoader(
+                MainApp.class.getResource("/com/example/peakplatesapp/Friends.fxml")
+        );
+        Parent root = loader.load();
+
+        FriendsController controller = loader.getController();
+        controller.setMainApp(this);
+        controller.setUserId(userId);
+        controller.loadFriends();
+
+        scene.setRoot(root);
+    }
+
+    // Friend Requests Page
+    public void switchToFriendRequests(String userId) throws IOException {
+        FXMLLoader loader = new FXMLLoader(
+                MainApp.class.getResource("/com/example/peakplatesapp/FriendRequests.fxml")
+        );
+        Parent root = loader.load();
+
+        FriendRequestsController controller = loader.getController();
+        controller.setMainApp(this);
+        controller.setUserId(userId);
+        controller.loadRequests();
+
+        scene.setRoot(root);
+    }
+
+    public void switchToHome(String userId) throws IOException {
+        FXMLLoader loader = new FXMLLoader(
+                MainApp.class.getResource("/com/example/peakplatesapp/Home.fxml")
+        );
+        Parent root = loader.load();
+
+        HomeController controller = loader.getController();
+        controller.setMainApp(this);
+        controller.setUserId(userId);
+        controller.loadUserData();
+
+
+        scene.setRoot(root);
+    }
+    public void switchToPreferences(String userId) throws IOException, ExecutionException, InterruptedException {
+        FXMLLoader loader = new FXMLLoader(
+                MainApp.class.getResource("/com/example/peakplatesapp/Preference.fxml")
+        );
+        Parent root = loader.load();
+
+        PreferenceController controller = loader.getController();
+        controller.setMainApp(this);
+        controller.setUserId(userId);
+
+        // Load goals
+        DocumentSnapshot doc = FirestoreContext.getFirestore()
+                .collection("users")
+                .document(userId)
+                .get()
+                .get();
+
+        Map<String, Object> goals = null;
+        if (doc.exists()) {
+            goals = (Map<String, Object>) doc.get("goals");
+        }
+
+        controller.loadCurrentGoals(goals);
+
+        // 🔥 IMPORTANT: use same scene, do NOT create a new one
         scene.setRoot(root);
     }
 
