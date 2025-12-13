@@ -144,13 +144,13 @@ public class LoginController {
     public void openSignup(ActionEvent event) {
         try {
             if (mainApp != null) {
-                mainApp.switchToView("signup.fxml");
+                mainApp.switchToView("Signup");
                 return;
             }
 
             // Fallback navigation
             Stage stage = (Stage) emailField.getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("signup.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("Signup"));
             Scene scene = new Scene(loader.load());
             stage.setScene(scene);
 
