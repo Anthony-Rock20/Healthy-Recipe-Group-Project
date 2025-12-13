@@ -2,76 +2,120 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
 
-<BorderPane xmlns="http://javafx.com/javafx"
+<AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.example.peakplatesapp.SharedWithMeController"
-            prefHeight="800.0" prefWidth="1000.0">
+            prefWidth="1000"
+            prefHeight="800">
 
-    <!-- Top Section -->
-    <top>
-        <VBox spacing="15" style="-fx-background-color: #f5f5f5; -fx-border-color: #ddd; -fx-border-width: 0 0 2 0;">
-            <padding>
-                <Insets top="20" bottom="20" left="20" right="20"/>
-            </padding>
+    <!-- Background -->
+    <ImageView fitWidth="1000"
+               fitHeight="800"
+               preserveRatio="false">
+        <image>
+            <Image url="@PeakPlatesBackground.png"/>
+        </image>
+    </ImageView>
 
-            <HBox spacing="20" alignment="CENTER_LEFT">
-                <Button text="⬅️ Back to Dashboard" onAction="#handleBackToDashboard"
-                        style="-fx-font-size: 12; -fx-padding: 8 15; -fx-background-color: #2196F3; -fx-text-fill: white;"/>
-                <Label text="Shared with Me" style="-fx-font-size: 24; -fx-font-weight: bold;"/>
-                <Region HBox.hgrow="ALWAYS"/>
-                <Label fx:id="sharedCountLabel" text="0 recipes" style="-fx-font-size: 14; -fx-text-fill: #666;"/>
-            </HBox>
+    <!-- Glass Panel -->
+    <VBox layoutX="180"
+          layoutY="80"
+          prefWidth="640"
+          prefHeight="640"
+          spacing="16"
+          alignment="TOP_CENTER"
+          style="
+              -fx-background-color: rgba(255,255,255,0.18);
+              -fx-background-radius: 20;
+              -fx-border-radius: 20;
+              -fx-border-color: rgba(255,255,255,0.35);
+              -fx-border-width: 1.5;
+              -fx-padding: 25;
+          ">
 
-            <!-- Search and Filter Section -->
-            <VBox spacing="10" style="-fx-background-color: #ffffff; -fx-border-color: #ddd; -fx-border-width: 1 0 0 0;">
-                <padding>
-                    <Insets top="10" bottom="10" left="20" right="20"/>
-                </padding>
+        <!-- Header -->
+        <HBox spacing="15" alignment="CENTER_LEFT">
+            <Button text="⬅ Back"
+                    onAction="#handleBackToDashboard"
+                    style="
+                        -fx-background-color: white;
+                        -fx-text-fill: #444;
+                        -fx-font-weight: bold;
+                        -fx-background-radius: 20;
+                        -fx-padding: 8 18;
+                    "/>
 
-                <!-- Search Bar -->
-                <HBox spacing="10" alignment="CENTER_LEFT">
-                    <TextField fx:id="searchField" promptText="🔍 Search shared recipes by name..." prefWidth="400" onKeyReleased="#handleSearch"/>
-                    <Button text="Clear" style="-fx-font-size: 12;" onAction="#handleClearSearch"/>
-                </HBox>
+            <Label text="Shared with Me"
+                   style="-fx-font-size: 26;
+                          -fx-font-weight: bold;
+                          -fx-text-fill: white;" />
 
-                <!-- Filter Tags -->
-                <Label text="Filter by Tags:" style="-fx-font-size: 12; -fx-font-weight: bold;"/>
-                <ScrollPane fitToHeight="true" hbarPolicy="AS_NEEDED" vbarPolicy="NEVER" prefHeight="56" style="-fx-background-color: transparent; -fx-padding: 4 0 4 0;">
-                    <content>
-                        <FlowPane fx:id="filterTagsContainer" hgap="8" vgap="8" prefWrapLength="900"/>
-                    </content>
-                </ScrollPane>
-            </VBox>
-        </VBox>
-    </top>
+            <Region HBox.hgrow="ALWAYS"/>
 
-    <!-- Center Section for Shared Recipes -->
-    <center>
-        <ScrollPane fitToWidth="true" style="-fx-background-color: white;">
-            <VBox fx:id="sharedContainer" spacing="20" style="-fx-background-color: white;">
-                <padding>
-                    <Insets top="20" bottom="20" left="20" right="20"/>
-                </padding>
-                <Label text="No recipes shared with you yet!" style="-fx-font-size: 16; -fx-text-fill: #999;"/>
+            <Label fx:id="sharedCountLabel"
+                   text="0 recipes"
+                   style="-fx-text-fill: rgba(255,255,255,0.8);" />
+        </HBox>
+
+        <!-- Search -->
+        <HBox spacing="10">
+            <TextField fx:id="searchField"
+                       promptText="🔍 Search shared recipes..."
+                       onKeyReleased="#handleSearch"
+                       prefWidth="420"/>
+
+            <Button text="Clear"
+                    onAction="#handleClearSearch"/>
+        </HBox>
+
+        <!-- Filters -->
+        <Label text="Filter by Tags"
+               style="-fx-text-fill: white;
+                      -fx-font-weight: bold;" />
+
+        <ScrollPane fitToHeight="true"
+                    hbarPolicy="AS_NEEDED"
+                    vbarPolicy="NEVER"
+                    prefHeight="55"
+                    style="-fx-background-color: transparent;">
+            <content>
+                <FlowPane fx:id="filterTagsContainer"
+                          hgap="8"
+                          vgap="8"
+                          prefWrapLength="600"/>
+            </content>
+        </ScrollPane>
+
+        <!-- Shared Recipes -->
+        <ScrollPane fitToWidth="true"
+                    prefHeight="420"
+                    style="-fx-background-color: transparent;">
+            <VBox fx:id="sharedContainer"
+                  spacing="15"
+                  style="-fx-background-color: transparent;">
+                <Label text="No recipes shared with you yet!"
+                       style="-fx-text-fill: rgba(255,255,255,0.75);
+                              -fx-font-size: 14;" />
             </VBox>
         </ScrollPane>
-    </center>
 
-    <!-- Bottom Navigation -->
-    <bottom>
-        <HBox spacing="10" alignment="CENTER" style="-fx-background-color: #f5f5f5;">
-            <padding>
-                <Insets top="10" bottom="10" left="20" right="20"/>
-            </padding>
-
-            <Button text="📤 Upload Recipe" style="-fx-font-size: 12; -fx-padding: 8 15;" onAction="#handleUploadRecipe"/>
-            <Button text="❤️ Favorites" style="-fx-font-size: 12; -fx-padding: 8 15;" onAction="#handleViewFavorites"/>
-            <Button text="👥 Friends" style="-fx-font-size: 12; -fx-padding: 8 15; -fx-background-color: #9C27B0; -fx-text-fill: white;" onAction="#handleViewFriends"/>
-            <Button text="🚪 Logout" onAction="#handleLogout"
-                    style="-fx-font-size: 12; -fx-padding: 8 15; -fx-background-color: #f44336; -fx-text-fill: white;"/>
+        <!-- Bottom Navigation -->
+        <HBox spacing="10" alignment="CENTER">
+            <Button text="📤 Upload Recipe" onAction="#handleUploadRecipe"/>
+            <Button text="❤️ Favorites" onAction="#handleViewFavorites"/>
+            <Button text="👥 Friends"
+                    onAction="#handleViewFriends"
+                    style="-fx-background-color: #9C27B0; -fx-text-fill: white;"/>
+            <Button text="🚪 Logout"
+                    onAction="#handleLogout"
+                    style="-fx-background-color: #f44336; -fx-text-fill: white;"/>
         </HBox>
-    </bottom>
-</BorderPane>
+
+    </VBox>
+
+</AnchorPane>

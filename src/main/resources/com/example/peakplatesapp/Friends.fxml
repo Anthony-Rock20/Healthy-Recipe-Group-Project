@@ -2,73 +2,116 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
 
-<BorderPane xmlns="http://javafx.com/javafx"
+<AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.example.peakplatesapp.FriendsController"
-            prefHeight="700" prefWidth="800">
+            prefWidth="1000"
+            prefHeight="800">
 
-    <!-- Top Banner -->
-    <top>
-        <VBox spacing="10" style="-fx-background-color: #9C27B0;">
-            <padding>
-                <Insets top="20" bottom="20" left="20" right="20"/>
-            </padding>
+    <!-- Background -->
+    <ImageView fitWidth="1000"
+               fitHeight="800"
+               layoutX="0"
+               layoutY="0"
+               preserveRatio="false">
+        <image>
+            <Image url="@PeakPlatesBackground.png"/>
+        </image>
+    </ImageView>
 
-            <Label text="Friends"
-                   style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: white;"/>
+    <!-- Glass Panel -->
+    <VBox layoutX="50"
+          layoutY="50"
+          prefWidth="900"
+          prefHeight="700"
+          spacing="20"
+          alignment="TOP_CENTER"
+          style="
+              -fx-background-color: rgba(255,255,255,0.18);
+              -fx-background-radius: 20;
+              -fx-border-radius: 20;
+              -fx-border-color: rgba(255,255,255,0.35);
+              -fx-border-width: 1.5;
+              -fx-padding: 25;
+          ">
 
-            <Label text="Find and add friends to connect!"
-                   style="-fx-font-size: 14; -fx-text-fill: #f0f0f0;"/>
+        <Label text="Friends"
+               style="-fx-font-size: 28;
+                      -fx-font-weight: bold;
+                      -fx-text-fill: white;" />
+
+        <Label text="Find and manage your friends"
+               style="-fx-text-fill: rgba(255,255,255,0.85);" />
+
+        <!-- Friends Section -->
+        <VBox spacing="10"
+              prefWidth="800"
+              style="
+                  -fx-background-color: rgba(255,255,255,0.22);
+                  -fx-background-radius: 15;
+                  -fx-padding: 15;
+              ">
+
+            <Label text="Your Friends"
+                   style="-fx-font-weight: bold; -fx-text-fill: white;" />
+
+            <Label fx:id="friendsCountLabel"
+                   text="Loading..."
+                   style="-fx-text-fill: rgba(255,255,255,0.75);" />
+
+            <VBox fx:id="friendsContainer" spacing="10"/>
         </VBox>
-    </top>
 
-    <!-- Center: Search & Users List -->
-    <center>
-        <ScrollPane fitToWidth="true">
-            <VBox spacing="15" style="-fx-background-color: white;">
-                <padding>
-                    <Insets top="20" bottom="20" left="20" right="20"/>
-                </padding>
+        <!-- Search -->
+        <HBox spacing="10" alignment="CENTER">
+            <TextField fx:id="searchField"
+                       promptText="Search users..."
+                       onKeyReleased="#handleSearch"
+                       prefWidth="350"
+                       style="
+                           -fx-background-color: rgba(255,255,255,0.25);
+                           -fx-background-radius: 20;
+                           -fx-text-fill: white;
+                           -fx-prompt-text-fill: rgba(255,255,255,0.7);
+                           -fx-border-color: transparent;
+                       "/>
 
-                <!-- Current Friends Section -->
-                <VBox spacing="10" style="-fx-border-color: #4CAF50; -fx-border-width: 2; -fx-padding: 15;">
-                    <Label text="👥 Your Friends" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #4CAF50;"/>
-                    <Label fx:id="friendsCountLabel" text="Loading..." style="-fx-font-size: 12; -fx-text-fill: #666;"/>
-                    <VBox fx:id="friendsContainer" spacing="10" style="-fx-background-color: #f0f8f0;"/>
-                </VBox>
-
-                <!-- Search Bar -->
-                <HBox spacing="10" alignment="CENTER_LEFT">
-                    <TextField fx:id="searchField"
-                               promptText="Search for users to add..."
-                               onKeyReleased="#handleSearch"
-                               prefWidth="400"/>
-                    <Button text="🔍 Search"
-                            style="-fx-background-color: #9C27B0; -fx-text-fill: white;"
-                            onAction="#handleSearch"/>
-                </HBox>
-
-                <!-- Users Container -->
-                <Label fx:id="usersCountLabel" text="Loading users..." style="-fx-font-size: 12; -fx-text-fill: #666;"/>
-                <VBox fx:id="usersContainer" spacing="10" style="-fx-background-color: #fafafa;"/>
-            </VBox>
-        </ScrollPane>
-    </center>
-
-    <!-- Bottom Navigation -->
-    <bottom>
-        <HBox spacing="10" alignment="CENTER" style="-fx-background-color: #f5f5f5;">
-            <padding>
-                <Insets top="10" bottom="10" left="20" right="20"/>
-            </padding>
-
-            <Button text="🏠 Dashboard" style="-fx-font-size: 12; -fx-padding: 8 15;" onAction="#handleBackToDashboard"/>
-            <Button text="❤️ Favorites" style="-fx-font-size: 12; -fx-padding: 8 15;" onAction="#handleViewFavorites"/>
-            <Button text="📨 Shared with Me" style="-fx-font-size: 12; -fx-padding: 8 15;" onAction="#handleViewSharedWithMe"/>
-            <Button text="📬 Friend Requests" style="-fx-font-size: 12; -fx-padding: 8 15; -fx-background-color: #FF9800; -fx-text-fill: white;" onAction="#handleFriendRequests"/>
-            <Button text="🚪 Logout" style="-fx-font-size: 12; -fx-padding: 8 15; -fx-background-color: #f44336; -fx-text-fill: white;" onAction="#handleLogout"/>
+            <Button text="Search"
+                    onAction="#handleSearch"
+                    style="
+                        -fx-background-color: white;
+                        -fx-text-fill: #444;
+                        -fx-font-weight: bold;
+                        -fx-background-radius: 20;
+                        -fx-padding: 8 18;
+                    "/>
         </HBox>
-    </bottom>
-</BorderPane>
+
+        <Label fx:id="usersCountLabel"
+               text="Loading users..."
+               style="-fx-text-fill: rgba(255,255,255,0.75);" />
+
+        <ScrollPane prefHeight="220" fitToWidth="true"
+                    style="-fx-background-color: transparent;">
+            <VBox fx:id="usersContainer" spacing="10" style="-fx-padding: 10;"/>
+        </ScrollPane>
+
+        <!-- Navigation -->
+        <HBox spacing="12" alignment="CENTER">
+            <Button text="Dashboard" onAction="#handleBackToDashboard"/>
+            <Button text="Favorites" onAction="#handleViewFavorites"/>
+            <Button text="Shared" onAction="#handleViewSharedWithMe"/>
+            <Button text="Requests" onAction="#handleFriendRequests"/>
+            <Button text="Logout"
+                    onAction="#handleLogout"
+                    style="-fx-background-color: #f44336; -fx-text-fill: white;"/>
+        </HBox>
+
+    </VBox>
+
+</AnchorPane>

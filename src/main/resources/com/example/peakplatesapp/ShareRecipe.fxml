@@ -2,52 +2,82 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
 
-<BorderPane xmlns="http://javafx.com/javafx"
+<AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.example.peakplatesapp.ShareRecipeController"
-            prefHeight="800.0" prefWidth="1000.0">
+            prefWidth="1000"
+            prefHeight="800">
 
-    <!-- Top Section -->
-    <top>
-        <VBox spacing="15" style="-fx-background-color: #f5f5f5;">
-            <padding>
-                <Insets top="20" bottom="20" left="20" right="20"/>
-            </padding>
+    <!-- Background Image -->
+    <ImageView fitWidth="1000"
+               fitHeight="800"
+               preserveRatio="false">
+        <image>
+            <Image url="@PeakPlatesBackground.png"/>
+        </image>
+    </ImageView>
 
-            <HBox spacing="20" alignment="CENTER_LEFT">
-                <Label text="Share Recipe" style="-fx-font-size: 24; -fx-font-weight: bold;"/>
-                <Region HBox.hgrow="ALWAYS"/>
-                <Label fx:id="recipeNameLabel" text="Recipe: " style="-fx-font-size: 14; -fx-text-fill: #666;"/>
-            </HBox>
-        </VBox>
-    </top>
+    <!-- Glass Panel -->
+    <VBox layoutX="180"
+          layoutY="90"
+          prefWidth="640"
+          prefHeight="620"
+          spacing="16"
+          alignment="TOP_CENTER"
+          style="
+              -fx-background-color: rgba(255,255,255,0.18);
+              -fx-background-radius: 20;
+              -fx-border-radius: 20;
+              -fx-border-color: rgba(255,255,255,0.35);
+              -fx-border-width: 1.5;
+              -fx-padding: 25;
+          ">
 
-    <!-- Users List Section -->
-    <center>
-        <ScrollPane fitToWidth="true" hbarPolicy="NEVER">
-            <VBox fx:id="usersContainer" spacing="10" style="-fx-background-color: white;">
-                <padding>
-                    <Insets top="20" bottom="20" left="20" right="20"/>
-                </padding>
-                <Label text="Loading users..." style="-fx-font-size: 16; -fx-text-fill: #999;"/>
+        <!-- Header -->
+        <HBox spacing="15" alignment="CENTER_LEFT">
+            <Label text="Share Recipe"
+                   style="-fx-font-size: 26;
+                          -fx-font-weight: bold;
+                          -fx-text-fill: white;" />
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Label fx:id="recipeNameLabel"
+                   text="Recipe:"
+                   style="-fx-text-fill: rgba(255,255,255,0.8);" />
+        </HBox>
+
+        <!-- Users List -->
+        <ScrollPane fitToWidth="true"
+                    prefHeight="460"
+                    style="-fx-background-color: transparent;">
+            <VBox fx:id="usersContainer"
+                  spacing="12"
+                  style="-fx-background-color: transparent;">
+                <Label text="Loading users..."
+                       style="-fx-text-fill: rgba(255,255,255,0.75);
+                              -fx-font-size: 14;" />
             </VBox>
         </ScrollPane>
-    </center>
 
-    <!-- Bottom Navigation -->
-    <bottom>
-        <HBox spacing="10" alignment="CENTER" style="-fx-background-color: #f5f5f5;">
-            <padding>
-                <Insets top="10" bottom="10" left="20" right="20"/>
-            </padding>
-
-            <Button text="🏠 Dashboard" style="-fx-font-size: 12; -fx-padding: 8 15;" onAction="#handleBackToDashboard"/>
-            <Button text="❤️ Favorites" style="-fx-font-size: 12; -fx-padding: 8 15;" onAction="#handleViewFavorites"/>
-            <Button text="👥 Friends" style="-fx-font-size: 12; -fx-padding: 8 15; -fx-background-color: #9C27B0; -fx-text-fill: white;" onAction="#handleViewFriends"/>
-            <Button text="📨 Shared with Me" style="-fx-font-size: 12; -fx-padding: 8 15;" onAction="#handleViewSharedWithMe"/>
-            <Button text="🚪 Logout" style="-fx-font-size: 12; -fx-padding: 8 15; -fx-background-color: #f44336; -fx-text-fill: white;" onAction="#handleLogout"/>
+        <!-- Bottom Navigation -->
+        <HBox spacing="10" alignment="CENTER">
+            <Button text="🏠 Dashboard" onAction="#handleBackToDashboard"/>
+            <Button text="❤️ Favorites" onAction="#handleViewFavorites"/>
+            <Button text="👥 Friends"
+                    onAction="#handleViewFriends"
+                    style="-fx-background-color: #9C27B0; -fx-text-fill: white;"/>
+            <Button text="📨 Shared with Me" onAction="#handleViewSharedWithMe"/>
+            <Button text="🚪 Logout"
+                    onAction="#handleLogout"
+                    style="-fx-background-color: #f44336; -fx-text-fill: white;"/>
         </HBox>
-    </bottom>
-</BorderPane>
+
+    </VBox>
+
+</AnchorPane>

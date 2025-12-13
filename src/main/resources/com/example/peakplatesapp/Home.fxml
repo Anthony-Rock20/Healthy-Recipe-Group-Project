@@ -1,61 +1,127 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.ProgressBar?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.control.DatePicker?>
-<VBox spacing="12" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.example.peakplatesapp.HomeController" style="-fx-padding:20;">
-    <Label fx:id="welcomeLabel" text="Home" style="-fx-font-size:18; -fx-font-weight: bold;" />
 
-    <HBox spacing="10" alignment="CENTER_LEFT">
-        <Label text="Select Date:" style="-fx-font-weight: bold;"/>
-        <DatePicker fx:id="datePicker"/>
-    </HBox>
-    <!-- Calories -->
-    <VBox spacing="6">
-        <Label text="Calories"/>
-        <ProgressBar fx:id="calorieBar" prefWidth="400" progress="0.0"/>
-        <Label fx:id="calorieLabel" text="0 / 0 kcal (0%)"/>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.peakplatesapp.HomeController"
+            prefWidth="1000"
+            prefHeight="800">
+
+    <!-- Background Image -->
+    <ImageView fitWidth="1000"
+               fitHeight="800"
+               preserveRatio="false">
+        <image>
+            <Image url="@PeakPlatesBackground.png"/>
+        </image>
+    </ImageView>
+
+    <!-- Glass Panel -->
+    <VBox layoutX="80"
+          layoutY="60"
+          prefWidth="840"
+          prefHeight="680"
+          spacing="20"
+          alignment="TOP_CENTER"
+          style="
+              -fx-background-color: rgba(255,255,255,0.18);
+              -fx-background-radius: 20;
+              -fx-border-radius: 20;
+              -fx-border-color: rgba(255,255,255,0.35);
+              -fx-border-width: 1.5;
+              -fx-padding: 30;
+          ">
+
+        <!-- Title -->
+        <Label fx:id="welcomeLabel"
+               text="Home"
+               style="-fx-font-size: 28;
+                      -fx-font-weight: bold;
+                      -fx-text-fill: white;" />
+
+        <!-- Date Picker -->
+        <HBox spacing="12" alignment="CENTER">
+            <Label text="Select Date:"
+                   style="-fx-font-weight: bold;
+                          -fx-text-fill: white;" />
+            <DatePicker fx:id="datePicker"/>
+        </HBox>
+
+        <!-- Calories -->
+        <VBox spacing="6" prefWidth="600">
+            <Label text="Calories" style="-fx-text-fill: white;"/>
+            <ProgressBar fx:id="calorieBar" prefWidth="600"/>
+            <Label fx:id="calorieLabel"
+                   text="0 / 0 kcal (0%)"
+                   style="-fx-text-fill: rgba(255,255,255,0.8);"/>
+        </VBox>
+
+        <!-- Protein -->
+        <VBox spacing="6" prefWidth="600">
+            <Label text="Protein (g)" style="-fx-text-fill: white;"/>
+            <ProgressBar fx:id="proteinBar" prefWidth="600"/>
+            <Label fx:id="proteinLabel"
+                   text="0 / 0 g (0%)"
+                   style="-fx-text-fill: rgba(255,255,255,0.8);"/>
+        </VBox>
+
+        <!-- Carbs -->
+        <VBox spacing="6" prefWidth="600">
+            <Label text="Carbs (g)" style="-fx-text-fill: white;"/>
+            <ProgressBar fx:id="carbBar" prefWidth="600"/>
+            <Label fx:id="carbLabel"
+                   text="0 / 0 g (0%)"
+                   style="-fx-text-fill: rgba(255,255,255,0.8);"/>
+        </VBox>
+
+        <!-- Fats -->
+        <VBox spacing="6" prefWidth="600">
+            <Label text="Fats (g)" style="-fx-text-fill: white;"/>
+            <ProgressBar fx:id="fatBar" prefWidth="600"/>
+            <Label fx:id="fatLabel"
+                   text="0 / 0 g (0%)"
+                   style="-fx-text-fill: rgba(255,255,255,0.8);"/>
+        </VBox>
+
+        <!-- Buttons -->
+        <HBox spacing="15" alignment="CENTER">
+            <Button text="◀"
+                    onAction="#goBack"
+                    style="
+                        -fx-background-color: white;
+                        -fx-text-fill: #444;
+                        -fx-font-weight: bold;
+                        -fx-background-radius: 20;
+                        -fx-padding: 10 20;
+                    "/>
+
+            <Button text="Preferences"
+                    onAction="#handlePreferences"
+                    style="
+                        -fx-background-color: white;
+                        -fx-text-fill: #444;
+                        -fx-font-weight: bold;
+                        -fx-background-radius: 20;
+                        -fx-padding: 10 20;
+                    "/>
+
+            <Button text="Log Meal"
+                    onAction="#openLogMealPopup"
+                    style="
+                        -fx-background-color: #00C7D9;
+                        -fx-text-fill: white;
+                        -fx-font-weight: bold;
+                        -fx-background-radius: 20;
+                        -fx-padding: 10 25;
+                    "/>
+        </HBox>
+
     </VBox>
 
-    <!-- Protein -->
-    <VBox spacing="6">
-        <Label text="Protein (g)"/>
-        <ProgressBar fx:id="proteinBar" prefWidth="400" progress="0.0"/>
-        <Label fx:id="proteinLabel" text="0 / 0 g (0%)"/>
-    </VBox>
-
-    <!-- Carbs -->
-    <VBox spacing="6">
-        <Label text="Carbs (g)"/>
-        <ProgressBar fx:id="carbBar" prefWidth="400" progress="0.0"/>
-        <Label fx:id="carbLabel" text="0 / 0 g (0%)"/>
-    </VBox>
-
-    <!-- Fats -->
-    <VBox spacing="6">
-        <Label text="Fats (g)"/>
-        <ProgressBar fx:id="fatBar" prefWidth="400" progress="0.0"/>
-        <Label fx:id="fatLabel" text="0 / 0 g (0%)"/>
-    </VBox>
-
-    <HBox spacing="10" style="-fx-padding: 10 0 0 110;">
-
-
-        <Button text="◀"
-                style="-fx-background-color: #00C7D9; -fx-text-fill: white; -fx-padding: 10 20;"
-                onAction="#goBack"
-        />
-        <Button text="Preference"
-                style="-fx-background-color: #00C7D9; -fx-text-fill: white; -fx-padding: 10 20;"
-                onAction="#handlePreferences"/>
-
-        <Button text="Log Meal"
-                style="-fx-background-color: #00C7D9; -fx-text-fill: white; -fx-padding: 10 20;"
-                onAction="#openLogMealPopup"
-        />
-
-    </HBox>
-</VBox>
+</AnchorPane>

@@ -2,155 +2,241 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.geometry.Insets?>
 
-<BorderPane xmlns="http://javafx.com/javafx"
+<AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.example.peakplatesapp.RecipeUploadController"
             prefHeight="700" prefWidth="800">
 
-    <!-- Top Banner -->
-    <top>
-        <VBox spacing="10" style="-fx-background-color: #4CAF50;">
-            <padding>
-                <Insets top="20" bottom="20" left="20" right="20"/>
-            </padding>
+    <!-- Background Image -->
+    <ImageView preserveRatio="false"
+               AnchorPane.topAnchor="0"
+               AnchorPane.bottomAnchor="0"
+               AnchorPane.leftAnchor="0"
+               AnchorPane.rightAnchor="0">
+        <image>
+            <Image url="@PeakPlatesBackground.png"/>
+        </image>
+    </ImageView>
 
-            <Label text="Upload Recipe"
-                   style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: white;"/>
+    <BorderPane AnchorPane.topAnchor="0"
+                AnchorPane.bottomAnchor="0"
+                AnchorPane.leftAnchor="0"
+                AnchorPane.rightAnchor="0"
+                style="-fx-background-color: transparent;">
 
-            <Label text="Share your delicious recipes with the community!"
-                   style="-fx-font-size: 14; -fx-text-fill: #f0f0f0;"/>
-        </VBox>
-    </top>
-
-    <!-- Form -->
-    <center>
-        <ScrollPane fitToWidth="true">
-            <VBox spacing="20" style="-fx-background-color: white;">
+        <!-- Top Banner -->
+        <top>
+            <VBox spacing="10"
+                  style="-fx-background-color: rgba(255,255,255,0.20);
+                         -fx-border-color: rgba(255,255,255,0.35);
+                         -fx-border-width: 0 0 1.5 0;">
                 <padding>
-                    <Insets top="25" bottom="25" left="40" right="40"/>
+                    <Insets top="20" bottom="20" left="20" right="20"/>
                 </padding>
 
-                <!-- Image Selection -->
-                <VBox spacing="10" style="-fx-border-color: #ddd; -fx-border-width: 2;">
+                <Label text="Upload Recipe"
+                       style="-fx-font-size: 28;
+                              -fx-font-weight: bold;
+                              -fx-text-fill: white;"/>
+
+                <Label text="Share your delicious recipes with the community!"
+                       style="-fx-font-size: 14;
+                              -fx-text-fill: rgba(255,255,255,0.85);"/>
+            </VBox>
+        </top>
+
+        <!-- Form -->
+        <center>
+            <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
+                <VBox spacing="20"
+                      style="-fx-background-color: rgba(255,255,255,0.18);
+                             -fx-background-radius: 22;
+                             -fx-border-radius: 22;
+                             -fx-border-color: rgba(255,255,255,0.35);
+                             -fx-border-width: 1.5;">
                     <padding>
-                        <Insets top="20" bottom="20" left="20" right="20"/>
+                        <Insets top="25" bottom="25" left="40" right="40"/>
                     </padding>
 
-                    <Label text="📸 Select Recipe Image"
-                           style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+                    <!-- Image Selection -->
+                    <VBox spacing="10" style="-fx-border-color: #ddd; -fx-border-width: 2;">
+                        <padding>
+                            <Insets top="20" bottom="20" left="20" right="20"/>
+                        </padding>
 
-                    <StackPane prefHeight="250" style="-fx-background-color: #f9f9f9;">
-                        <ImageView fx:id="imagePreview" fitHeight="240" preserveRatio="true"/>
-                        <Label fx:id="imageLabel"
-                               text="Click “Choose Image”"
-                               style="-fx-font-size: 14; -fx-text-fill: #999;"/>
-                    </StackPane>
+                        <Label text="📸 Select Recipe Image"
+                               style="-fx-font-size: 16;
+                                      -fx-font-weight: bold;
+                                      -fx-text-fill: #0B2A44;
+                                      -fx-background-color: rgba(180,220,255,0.75);
+                                      -fx-background-radius: 10;
+                                      -fx-padding: 6 10;"/>
 
-                    <Button fx:id="chooseImageButton" text="🖼️ Choose Image"
-                            style="-fx-background-color: #2196F3; -fx-text-fill: white;"
-                            onAction="#handleSelectImage"/>
-                    <Label fx:id="selectedImageLabel"
-                           text="No image selected"
-                           style="-fx-font-size: 12; -fx-text-fill: #666;"/>
+                        <StackPane prefHeight="250" style="-fx-background-color: #f9f9f9;">
+                            <ImageView fx:id="imagePreview" fitHeight="240" preserveRatio="true"/>
+                            <Label fx:id="imageLabel"
+                                   text="Click “Choose Image”"
+                                   style="-fx-font-size: 14; -fx-text-fill: #999;"/>
+                        </StackPane>
 
-                    <Label text="⚠️ Maximum image size: 1 MB (1,048,576 bytes)"
-                           style="-fx-font-size: 11; -fx-text-fill: #f57c00; -fx-font-style: italic;"/>
-                </VBox>
+                        <Button fx:id="chooseImageButton" text="🖼️ Choose Image"
+                                style="-fx-background-color: #2196F3; -fx-text-fill: white;"
+                                onAction="#handleSelectImage"/>
 
-                <!-- Text Fields -->
-                <VBox spacing="10">
-                    <Label text="📛 Recipe Name" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
-                    <TextField fx:id="titleField" promptText="e.g. Classic Lasagna"/>
+                        <Label fx:id="selectedImageLabel"
+                               text="No image selected"
+                               style="-fx-font-size: 12;
+                                      -fx-text-fill: #0B2A44;
+                                      -fx-background-color: rgba(180,220,255,0.55);
+                                      -fx-background-radius: 10;
+                                      -fx-padding: 4 8;"/>
 
-                    <!-- Dietary Info Row -->
-                    <HBox spacing="10">
-                        <VBox spacing="4">
-                            <Label text="Calories"/>
-                            <TextField fx:id="caloriesField" promptText="kcal"/>
-                        </VBox>
-                        <VBox spacing="4">
-                            <Label text="Protein (g)"/>
-                            <TextField fx:id="proteinField" promptText="g"/>
-                        </VBox>
-                        <VBox spacing="4">
-                            <Label text="Carbs (g)"/>
-                            <TextField fx:id="carbField" promptText="g"/>
-                        </VBox>
-                        <VBox spacing="4">
-                            <Label text="Fats (g)"/>
-                            <TextField fx:id="fatField" promptText="g"/>
-                        </VBox>
+                        <Label text="⚠️ Maximum image size: 1 MB (1,048,576 bytes)"
+                               style="-fx-font-size: 11;
+                                      -fx-font-style: italic;
+                                      -fx-text-fill: #0B2A44;
+                                      -fx-background-color: rgba(180,220,255,0.55);
+                                      -fx-background-radius: 10;
+                                      -fx-padding: 4 8;"/>
+                    </VBox>
+
+                    <!-- Text Fields -->
+                    <VBox spacing="10">
+                        <Label text="📛 Recipe Name"
+                               style="-fx-font-size: 16;
+                                      -fx-font-weight: bold;
+                                      -fx-text-fill: #0B2A44;
+                                      -fx-background-color: rgba(180,220,255,0.75);
+                                      -fx-background-radius: 10;
+                                      -fx-padding: 6 10;"/>
+                        <TextField fx:id="titleField" promptText="e.g. Classic Lasagna"/>
+
+                        <!-- Dietary Info Row -->
+                        <HBox spacing="10">
+                            <VBox spacing="4">
+                                <Label text="Calories"
+                                       style="-fx-text-fill: #0B2A44;
+                                              -fx-background-color: rgba(180,220,255,0.70);
+                                              -fx-background-radius: 10;
+                                              -fx-padding: 4 8;"/>
+                                <TextField fx:id="caloriesField" promptText="kcal"/>
+                            </VBox>
+                            <VBox spacing="4">
+                                <Label text="Protein (g)"
+                                       style="-fx-text-fill: #0B2A44;
+                                              -fx-background-color: rgba(180,220,255,0.70);
+                                              -fx-background-radius: 10;
+                                              -fx-padding: 4 8;"/>
+                                <TextField fx:id="proteinField" promptText="g"/>
+                            </VBox>
+                            <VBox spacing="4">
+                                <Label text="Carbs (g)"
+                                       style="-fx-text-fill: #0B2A44;
+                                              -fx-background-color: rgba(180,220,255,0.70);
+                                              -fx-background-radius: 10;
+                                              -fx-padding: 4 8;"/>
+                                <TextField fx:id="carbField" promptText="g"/>
+                            </VBox>
+                            <VBox spacing="4">
+                                <Label text="Fats (g)"
+                                       style="-fx-text-fill: #0B2A44;
+                                              -fx-background-color: rgba(180,220,255,0.70);
+                                              -fx-background-radius: 10;
+                                              -fx-padding: 4 8;"/>
+                                <TextField fx:id="fatField" promptText="g"/>
+                            </VBox>
+                        </HBox>
+
+                        <Label text="🏷️ Tags (select multiple)"
+                               style="-fx-font-size: 14;
+                                      -fx-font-weight: bold;
+                                      -fx-text-fill: #0B2A44;
+                                      -fx-background-color: rgba(180,220,255,0.75);
+                                      -fx-background-radius: 10;
+                                      -fx-padding: 6 10;"/>
+
+                        <FlowPane fx:id="tagsContainer" hgap="8" vgap="8">
+                            <children>
+                                <CheckBox text="Weight Loss"/>
+                                <CheckBox text="Muscle Gain"/>
+                                <CheckBox text="Diabetic Friendly"/>
+                                <CheckBox text="Vegetarian"/>
+                                <CheckBox text="Dairy Free"/>
+                                <CheckBox text="Anti-Inflammatory"/>
+                                <CheckBox text="Nut Free"/>
+                                <CheckBox text="Soy Free"/>
+                                <CheckBox text="High Antioxidants"/>
+                                <CheckBox text="Immunity Boosting"/>
+                                <CheckBox text="Whole Grains"/>
+                                <CheckBox text="Greens"/>
+                                <CheckBox text="High Protein"/>
+                                <CheckBox text="High Fiber"/>
+                                <CheckBox text="Low Calories"/>
+                                <CheckBox text="Vegan"/>
+                                <CheckBox text="Gluten Free"/>
+                                <CheckBox text="Heart Healthy"/>
+                                <CheckBox text="Low Sugar"/>
+                                <CheckBox text="Low Sodium"/>
+                                <CheckBox text="Gut Friendly"/>
+                                <CheckBox text="No Added Sugar"/>
+                            </children>
+                        </FlowPane>
+
+                        <Label text="🥘 Ingredients"
+                               style="-fx-font-size: 16;
+                                      -fx-font-weight: bold;
+                                      -fx-text-fill: #0B2A44;
+                                      -fx-background-color: rgba(180,220,255,0.75);
+                                      -fx-background-radius: 10;
+                                      -fx-padding: 6 10;"/>
+                        <TextArea fx:id="ingredientsField" wrapText="true" prefRowCount="6"
+                                  promptText="List each ingredient on a new line:&#10;- 2 cups flour&#10;- 1 cup sugar&#10;- 3 eggs"/>
+
+                        <Label text="👨‍🍳 Steps"
+                               style="-fx-font-size: 16;
+                                      -fx-font-weight: bold;
+                                      -fx-text-fill: #0B2A44;
+                                      -fx-background-color: rgba(180,220,255,0.75);
+                                      -fx-background-radius: 10;
+                                      -fx-padding: 6 10;"/>
+                        <TextArea fx:id="stepsField" wrapText="true" prefRowCount="6"
+                                  promptText="List each step on a new line:&#10;1. Preheat oven to 350°F&#10;2. Mix dry ingredients&#10;3. Add wet ingredients..."/>
+                    </VBox>
+
+                    <!-- Buttons -->
+                    <HBox spacing="20" alignment="CENTER">
+                        <Button text="📤 Upload Recipe"
+                                style="-fx-background-color: #4CAF50; -fx-text-fill: white;"
+                                onAction="#handleUpload"/>
+                        <Button text="❌ Cancel"
+                                style="-fx-background-color: #f44336; -fx-text-fill: white;"
+                                onAction="#handleCancel"/>
                     </HBox>
-
-                    <!-- Tags selection -->
-                    <Label text="🏷️ Tags (select multiple)" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
-                    <FlowPane fx:id="tagsContainer" hgap="8" vgap="8">
-                        <children>
-                            <!-- New tags -->
-                            <CheckBox text="Weight Loss"/>
-                            <CheckBox text="Muscle Gain"/>
-                            <CheckBox text="Diabetic Friendly"/>
-                            <CheckBox text="Vegetarian"/>
-                            <CheckBox text="Dairy Free"/>
-                            <CheckBox text="Anti-Inflammatory"/>
-                            <CheckBox text="Nut Free"/>
-                            <CheckBox text="Soy Free"/>
-                            <CheckBox text="High Antioxidants"/>
-                            <CheckBox text="Immunity Boosting"/>
-                            <!-- Original tags -->
-                            <CheckBox text="Whole Grains"/>
-                            <CheckBox text="Greens"/>
-                            <CheckBox text="High Protein"/>
-                            <CheckBox text="High Fiber"/>
-                            <CheckBox text="Low Calories"/>
-                            <CheckBox text="Vegan"/>
-                            <CheckBox text="Gluten Free"/>
-                            <CheckBox text="Heart Healthy"/>
-                            <CheckBox text="Low Sugar"/>
-                            <CheckBox text="Low Sodium"/>
-                            <CheckBox text="Gut Friendly"/>
-                            <CheckBox text="No Added Sugar"/>
-                        </children>
-                    </FlowPane>
-
-                    <Label text="🥘 Ingredients" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
-                    <TextArea fx:id="ingredientsField" wrapText="true" prefRowCount="6" promptText="List each ingredient on a new line:&#10;- 2 cups flour&#10;- 1 cup sugar&#10;- 3 eggs"/>
-
-                    <Label text="👨‍🍳 Steps" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
-                    <TextArea fx:id="stepsField" wrapText="true" prefRowCount="6" promptText="List each step on a new line:&#10;1. Preheat oven to 350°F&#10;2. Mix dry ingredients&#10;3. Add wet ingredients..."/>
-
-                    <!-- Description removed: replaced by Ingredients + Steps -->
                 </VBox>
+            </ScrollPane>
+        </center>
 
-                <!-- Buttons -->
-                <HBox spacing="20" alignment="CENTER">
-                    <Button text="📤 Upload Recipe"
-                            style="-fx-background-color: #4CAF50; -fx-text-fill: white;"
-                            onAction="#handleUpload"/>
+        <!-- Bottom Navigation -->
+        <bottom>
+            <HBox spacing="10" alignment="CENTER"
+                  style="-fx-background-color: rgba(255,255,255,0.20);
+                         -fx-border-color: rgba(255,255,255,0.35);
+                         -fx-border-width: 1.5 0 0 0;">
+                <padding>
+                    <Insets top="10" bottom="10" left="20" right="20"/>
+                </padding>
 
-                    <Button text="❌ Cancel"
-                            style="-fx-background-color: #f44336; -fx-text-fill: white;"
-                            onAction="#handleCancel"/>
-                </HBox>
-            </VBox>
-        </ScrollPane>
-    </center>
+                <Button text="🏠 Dashboard" style="-fx-font-size: 12; -fx-padding: 8 15;" onAction="#handleCancel"/>
+                <Button text="❤️ Favorites" style="-fx-font-size: 12; -fx-padding: 8 15;" onAction="#handleViewFavorites"/>
+                <Button text="👥 Friends" style="-fx-font-size: 12; -fx-padding: 8 15; -fx-background-color: #9C27B0; -fx-text-fill: white;" onAction="#handleViewFriends"/>
+                <Button text="📨 Shared with Me" style="-fx-font-size: 12; -fx-padding: 8 15;" onAction="#handleViewSharedWithMe"/>
+                <Button text="🚪 Logout" style="-fx-font-size: 12; -fx-padding: 8 15; -fx-background-color: #f44336; -fx-text-fill: white;" onAction="#handleLogout"/>
+            </HBox>
+        </bottom>
 
-    <!-- Bottom Navigation -->
-    <bottom>
-        <HBox spacing="10" alignment="CENTER" style="-fx-background-color: #f5f5f5;">
-            <padding>
-                <Insets top="10" bottom="10" left="20" right="20"/>
-            </padding>
-
-            <Button text="🏠 Dashboard" style="-fx-font-size: 12; -fx-padding: 8 15;" onAction="#handleCancel"/>
-            <Button text="❤️ Favorites" style="-fx-font-size: 12; -fx-padding: 8 15;" onAction="#handleViewFavorites"/>
-            <Button text="👥 Friends" style="-fx-font-size: 12; -fx-padding: 8 15; -fx-background-color: #9C27B0; -fx-text-fill: white;" onAction="#handleViewFriends"/>
-            <Button text="📨 Shared with Me" style="-fx-font-size: 12; -fx-padding: 8 15;" onAction="#handleViewSharedWithMe"/>
-            <Button text="🚪 Logout" style="-fx-font-size: 12; -fx-padding: 8 15; -fx-background-color: #f44336; -fx-text-fill: white;" onAction="#handleLogout"/>
-        </HBox>
-    </bottom>
-</BorderPane>
+    </BorderPane>
+</AnchorPane>
